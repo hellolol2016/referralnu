@@ -84,13 +84,14 @@ CREATE TABLE Connections
 -- Create Requests table
 CREATE TABLE Requests
 (
+    requestId   INT PRIMARY KEY AUTO_INCREMENT,
     studentId   INT NOT NULL,
-    referrerId  INT NOT NULL,
     status      VARCHAR(50),
     requestDate TIMESTAMP,
     industryId  INT NOT NULL,
     createdAt   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (studentId, referrerId),
+    lastViewed  TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    viewCount   INT,
     FOREIGN KEY (studentId) REFERENCES Students (studentId)
         ON UPDATE CASCADE
         ON DELETE CASCADE,
