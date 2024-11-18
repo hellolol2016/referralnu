@@ -75,7 +75,7 @@ JOIN Advisor a ON s.advisorId = a.advisorID;
 SELECT s.StudentId, s.firstName, s.lastName, r.createdAt, r.pendingStatus
 FROM Students s JOIN Advisor a ON s.advisorId = a.advisorId 
 JOIN Requests r ON s.StudentId = r.StudentId
-WHERE r.createdAt > r.lastViewed
+WHERE studentId = 1
 
 -- Story 3.2 As a co-op advisor, I need to be able to view a dashboard of all my students’ application statuses so I can identify who is making progress and who needs assistance.
 --
@@ -93,12 +93,12 @@ SELECT a.advisorID,
        SUM(req.pendingStatus = 'Pending') AS pendingRequests,
        SUM(req.pendingStatus = 'Accepted') AS acceptedRequests,
        SUM(req.pendingStatus = 'Rejected') AS rejectedRequests
-FROM Advisor a
-JOIN Students s ON a.advisorID = s.advisorId
+FROM Advisor a JOIN Students s ON a.advisorID = s.advisorId
 LEFT JOIN Requests req ON s.studentId = req.studentId
 WHERE a.advisorID = 1 
 GROUP BY a.advisorID, s.studentId, 
 ORDER BY s.studentId;
+
 -- Story 3.3 As a co-op advisor, I need to be able to communicate directly with students through the app so that I can provide timely feedback and guidance.
 /*
 INSERT INTO Message (advisorId, studentId, content, timestamp, reminderTimestamp, reminderContent)
@@ -107,10 +107,7 @@ I think we would need either a new table, or like a notifications attribute in s
 -- Story 3.4 As a co-op advisor, I need to be able to set reminders for follow-up communications with students based on their application timelines so that I can make sure they stay on track.
 /*
 UPDATE Student
-SET notifications = JSON_OBJECT(
-        'message', 'Please review the feedback I provided on your application.',
-        'timestamp', CURRENT_TIMESTAMP
-    ),
+SET notifications = 'Please review the feedback I provided on your application.',
     followUpBy = DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 3 DAY)
 WHERE studentId = 1
 
@@ -120,9 +117,9 @@ Or we could have a new table connecting students and advisors for communication,
 */
 
 -- Story 3.5 As a co-op advisor, I need to be able to add referral givers that I know to the app so that the referral seekers have as many options as possible.
-/*
+
 INSERT INTO Referrer (name, email, phoneNumber, company, adminId, industryId, numReferrals)
-*/
+
 -- Story 3.6 As a co-op advisor, I could refer students to connect with certain companies based on data visualizations that show what companies give the most referrals
 SELECT referrerId
 FROM Referrer
