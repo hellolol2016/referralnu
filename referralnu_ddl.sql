@@ -73,6 +73,7 @@ CREATE TABLE Connections
     referrerId   INT NOT NULL,
     creationDate TIMESTAMP,
     studentId    INT NOT NULL,
+    companyName VARCHAR(255) NOT NULL,
     FOREIGN KEY (referrerId) REFERENCES Referrer (referrerId)
         ON UPDATE CASCADE
         ON DELETE RESTRICT,
@@ -86,12 +87,13 @@ CREATE TABLE Requests
 (
     requestId   INT PRIMARY KEY AUTO_INCREMENT,
     studentId   INT NOT NULL,
-    status      VARCHAR(50),
+    pendingStatus      VARCHAR(50),
     requestDate TIMESTAMP,
     industryId  INT NOT NULL,
     createdAt   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     lastViewed  TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     viewCount   INT,
+    companyName VARCHAR(255) NOT NULL,
     FOREIGN KEY (studentId) REFERENCES Students (studentId)
         ON UPDATE CASCADE
         ON DELETE CASCADE,
@@ -146,17 +148,17 @@ VALUES
 ('David Wilson', 'davidwilson@techcorp.com', '555-6677', 'TechCorp', 1, 1, 5),
 ('Rachel Adams', 'racheladams@healthcareinc.com', '555-7788', 'HealthcareInc', 2, 2, 3);
 
-INSERT INTO Connections (referrerId, studentId)
+INSERT INTO Connections (referrerId, studentId, companyName)
 VALUES
-(1, 1),
-(2, 2),
-(1, 3);
+(1, 1, 'Google'),
+(2, 2, 'Amazon'),
+(1, 3, 'FaceBook');
 
-INSERT INTO Requests (studentId, referrerId, status, industryId)
+INSERT INTO Requests (studentId, referrerId, pendingStatus, industryId, companyName)
 VALUES
-(1, 1, 'Pending', 1),
-(2, 2, 'Accepted', 2),
-(3, 1, 'Rejected', 3);
+(1, 1, 'Pending', 1, 'Google'),
+(2, 2, 'Accepted', 2, 'Amazon'),
+(3, 1, 'Rejected', 3, 'FaceBook');
 
 INSERT INTO Messages (messageId, messageContent, adminId, connectionId, referrerId, studentId)
 VALUES
