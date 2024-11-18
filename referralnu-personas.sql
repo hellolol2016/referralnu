@@ -69,6 +69,83 @@ SELECT a.advisorID,a.firstName, a.lastName, a.email, a.phoneNumber
 FROM Students s
 JOIN Advisor a ON s.advisorId = a.advisorID;
 
+-- User Persona 3: Advisor
+
+-- Story 3.1 As an advisor, I need to monitor students' progress in their job search, specifically their application statuses and networking activities.
+SELECT s.StudentId, s.firstName, s.lastName, r.createdAt, r.pendingStatus
+FROM Students s JOIN Advisor a ON s.advisorId = a.advisorId 
+JOIN Requests r ON s.StudentId = r.StudentId
+WHERE r.createdAt > r.lastViewed
+
+-- Story 3.2 As a co-op advisor, I need to be able to view a dashboard of all my students’ application statuses so I can identify who is making progress and who needs assistance.
+--
+SELECT s.studentId, 
+       SUM(req.pendingStatus = 'Pending') AS pendingRequests,
+       SUM(req.pendingStatus = 'Accepted') AS acceptedRequests,
+       SUM(req.pendingStatus = 'Rejected') AS rejectedRequests
+FROM Students s
+LEFT JOIN Requests req ON s.studentId = req.studentId
+where s.advisorId = 1
+GROUP BY s.studentId
+
+SELECT a.advisorID, 
+       s.studentId,
+       SUM(req.pendingStatus = 'Pending') AS pendingRequests,
+       SUM(req.pendingStatus = 'Accepted') AS acceptedRequests,
+       SUM(req.pendingStatus = 'Rejected') AS rejectedRequests
+FROM Advisor a
+JOIN Students s ON a.advisorID = s.advisorId
+LEFT JOIN Requests req ON s.studentId = req.studentId
+WHERE a.advisorID = 1 
+GROUP BY a.advisorID, s.studentId, 
+ORDER BY s.studentId;
+-- Story 3.3 As a co-op advisor, I need to be able to communicate directly with students through the app so that I can provide timely feedback and guidance.
+/*
+INSERT INTO Message (advisorId, studentId, content, timestamp, reminderTimestamp, reminderContent)
+I think we would need either a new table, or like a notifications attribute in students
+*/
+-- Story 3.4 As a co-op advisor, I need to be able to set reminders for follow-up communications with students based on their application timelines so that I can make sure they stay on track.
+/*
+UPDATE Student
+SET notifications = JSON_OBJECT(
+        'message', 'Please review the feedback I provided on your application.',
+        'timestamp', CURRENT_TIMESTAMP
+    ),
+    followUpBy = DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 3 DAY)
+WHERE studentId = 1
+
+This would need two new attributes in the Student Table. 
+Or it could be wrapped into the Advisor table, but shown to the students
+Or we could have a new table connecting students and advisors for communication, which would make the reminder feature work better
+*/
+
+-- Story 3.5 As a co-op advisor, I need to be able to add referral givers that I know to the app so that the referral seekers have as many options as possible.
+/*
+INSERT INTO Referrer (name, email, phoneNumber, company, adminId, industryId, numReferrals)
+*/
+-- Story 3.6 As a co-op advisor, I could refer students to connect with certain companies based on data visualizations that show what companies give the most referrals
+SELECT referrerId
+FROM Referrer
+WHERE companyName = (
+    SELECT companyName
+    FROM Referrer
+    GROUP BY companyName
+    ORDER BY SUM(numReferrals) DESC
+    LIMIT 1
+);
+SELECT r.referrerId
+FROM Referrer r
+WHERE r.industryId = (
+    SELECT req.industryId
+    FROM Requests req
+    WHERE req.pendingStatus = 'Accepted'
+    GROUP BY req.companyName
+    ORDER BY COUNT(req.requestId) DESC
+    LIMIT 1
+);
+--this works by industry for the company with the most accepted requests
+-- when it should maybe work by company, which both requests and referrers has, but wouldn't match our ER diagram
+
 -- User Persona 4: Referrer
 
 -- Story 4.1 As a person giving out referrals, I need to be able to see the resumes and skills of people requesting referrals so that I don’t waste any referral slots.
