@@ -68,3 +68,53 @@ ORDER BY r.company ASC;
 SELECT a.advisorID,a.firstName, a.lastName, a.email, a.phoneNumber
 FROM Students s
 JOIN Advisor a ON s.advisorId = a.advisorID;
+
+-- User Persona 4: Referrer
+
+-- Story 4.1 As a person giving out referrals, I need to be able to see the resumes and skills of people requesting referrals so that I don’t waste any referral slots.
+SELECT S.studentId, S.name AS studentName, S.contactInfo AS studentContact, R.company AS referredCompany, C.creationDate AS referralDate
+FROM Connections C
+JOIN Referrer R ON C.referrerId = R.referrerId
+JOIN Students S ON C.studentId = S.studentId
+
+-- Story 4.2 As a person giving out referrals, I need to be able to include or remove the companies I can give referrals to so that I get requests from relevant job seekers.
+-- Add a company for a referrer (ex. referrerId = 100)
+UPDATE Referrer
+SET company = 'Company 2'
+WHERE referrerId = 100;
+
+-- Remove a company from the list (set it to NULL)
+UPDATE Referrer
+SET company = NULL
+WHERE referrerId = 100;
+
+-- Story 4.3 As a person giving out referrals, I need to be able to reject or accept applications for referrals so that I can indicate who I will be giving a referral to.
+-- Accept an application
+UPDATE Requests
+SET status = 'Accepted'
+-- Reject an application
+UPDATE Requests
+SET status = 'Rejected'
+
+-- Story 4.4 As a person giving out referrals, I need to be able to communicate requirements to get a referral from me so that I don’t get applicants who have no chance.
+-- Add or update referral requirements in the Referrer table
+UPDATE Referrer
+SET contactInfo = 'Have 2+ years of experience'
+WHERE referrerId = 100;
+
+-- Story 4.5 As a person giving out referrals, I need to be able to see if any of my applicants have already gotten a referral from someone else to my company.
+SELECT C.studentId, S.name AS studentName, R.company AS referredCompany, C.creationDate AS referralDate, Req.status AS applicationStatus
+FROM Connections C
+JOIN Referrer R ON C.referrerId = R.referrerId
+JOIN Students S ON C.studentId = S.studentId
+JOIN Requests Req ON Req.studentId = S.studentId AND Req.referrerId = R.referrerId
+
+-- Story 4.6 As a person giving out referrals, I need to be able to add contact information, including people who can help contact or connect with me, so that people meeting me have a reference to help with interpersonal connection.
+UPDATE Referrer
+SET contactInfo = 'Email: @gmail.com'
+
+
+
+
+
+
