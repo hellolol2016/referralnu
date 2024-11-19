@@ -4,14 +4,14 @@ USE referralnu;
 
 -- Story 1: As an administrator, I need to be able to verify that referral offers are from real employees so that the app doesn’t get fake referral offers.
 
-SELECT ref.Name, ref.Company FROM Requests req
+SELECT ref.name, ref.companyName FROM Requests req
 JOIN Referrer ref ON req.referrerId = ref.referrerId;
 
 -- Story 2: As an administrator, I need to be able to cut connections that are not considered appropriate and productive to ensure students’ referral searches are as smooth as possible
 -- First we want to find all the messages that contain bad words, then we want to delete the connections that are associated with those messages.
-SELECT m.Message, m.studentId
+SELECT m.message, m.studentId
 FROM Messages m
-WHERE m.Message LIKE '%BAD WORD HERE%'
+WHERE m.message LIKE '%BAD WORD HERE%'
 
 DELETE FROM Connections
 WHERE connectionId = m.connectionId;
@@ -21,7 +21,9 @@ SELECT viewCount, lastViewed from Requests;
 -- Story 4: As an administrator, I need to be able to ensure that referral givers give the referral to the student they said they would so that the process’ integrity is conserved
 -- To do this, we can check the status of the connection, and check the message history between the two parties
 -- Assume we are looking at student 1 and referrer 1
-SELECT c.status, m.Message
+
+-- Connections doesnn't have a status, so maybe requests instead.
+SELECT c.status, m.message
 FROM Connections c
 JOIN Messages m ON c.connectionId = m.connectionId
 WHERE c.studentId = 1 AND c.referrerId = 1;
