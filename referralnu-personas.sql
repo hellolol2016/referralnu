@@ -88,16 +88,7 @@ LEFT JOIN Requests req ON s.studentId = req.studentId
 where s.advisorId = 1
 GROUP BY s.studentId
 
-SELECT a.advisorID, 
-       s.studentId,
-       SUM(req.pendingStatus = 'Pending') AS pendingRequests,
-       SUM(req.pendingStatus = 'Accepted') AS acceptedRequests,
-       SUM(req.pendingStatus = 'Rejected') AS rejectedRequests
-FROM Advisor a JOIN Students s ON a.advisorID = s.advisorId
-LEFT JOIN Requests req ON s.studentId = req.studentId
-WHERE a.advisorID = 1 
-GROUP BY a.advisorID, s.studentId, 
-ORDER BY s.studentId;
+
 
 -- Story 3.3 As a co-op advisor, I need to be able to communicate directly with students through the app so that I can provide timely feedback and guidance.
 /*
@@ -132,8 +123,8 @@ WHERE companyName = (
 );
 SELECT r.referrerId
 FROM Referrer r
-WHERE r.industryId = (
-    SELECT req.industryId
+WHERE r.companyName = (
+    SELECT req.companyName
     FROM Requests req
     WHERE req.pendingStatus = 'Accepted'
     GROUP BY req.companyName
