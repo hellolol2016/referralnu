@@ -154,11 +154,11 @@ VALUES
 (2, 2, 'Amazon'),
 (1, 3, 'FaceBook');
 
-INSERT INTO Requests (studentId, referrerId, pendingStatus, industryId, companyName)
+INSERT INTO Requests (studentId, pendingStatus, industryId, companyName)
 VALUES
-(1, 1, 'Pending', 1, 'Google'),
-(2, 2, 'Accepted', 2, 'Amazon'),
-(3, 1, 'Rejected', 3, 'FaceBook');
+(1, 'Pending', 1, 'Google'),
+(2,  'Accepted', 2, 'Amazon'),
+(3,  'Rejected', 3, 'FaceBook');
 
 INSERT INTO Messages (messageId, messageContent, adminId, connectionId, referrerId, studentId)
 VALUES

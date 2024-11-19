@@ -19,11 +19,9 @@ WHERE connectionId = m.connectionId;
 -- We have a viewCount and lastViewed column in the Requests table that we can use to see how many times a request has been viewed and when it was last viewed.
 SELECT viewCount, lastViewed from Requests;
 -- Story 4: As an administrator, I need to be able to ensure that referral givers give the referral to the student they said they would so that the process’ integrity is conserved
--- To do this, we can check the status of the connection, and check the message history between the two parties
+-- To do this, we can check the message history between the two parties
 -- Assume we are looking at student 1 and referrer 1
-
--- Connections doesn't have a status rn. Maybe request instead?
-SELECT c.status, m.message
+SELECT m.Message
 FROM Connections c
 JOIN Messages m ON c.connectionId = m.connectionId
 WHERE c.studentId = 1 AND c.referrerId = 1;
@@ -97,21 +95,15 @@ GROUP BY s.studentId
 
 
 -- Story 3.3 As a co-op advisor, I need to be able to communicate directly with students through the app so that I can provide timely feedback and guidance.
-/*
-INSERT INTO Message (advisorId, studentId, content, timestamp, reminderTimestamp, reminderContent)
-I think we would need either a new table, or like a notifications attribute in students
-*/
--- Story 3.4 As a co-op advisor, I need to be able to set reminders for follow-up communications with students based on their application timelines so that I can make sure they stay on track.
-/*
-UPDATE Student
-SET notifications = 'Please review the feedback I provided on your application.',
-    followUpBy = DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 3 DAY)
-WHERE studentId = 1
 
-This would need two new attributes in the Student Table. 
-Or it could be wrapped into the Advisor table, but shown to the students
-Or we could have a new table connecting students and advisors for communication, which would make the reminder feature work better
-*/
+SELECT firstName, lastName, email, phoneNumber 
+FROM Students
+WHERE studentId = 1
+-- Story 3.4 As a co-op advisor, I need to be able to set reminders for follow-up communications with students based on their application timelines so that I can make sure they stay on track.
+
+SELECT firstName, lastName, email, phoneNumber 
+FROM Students
+WHERE studentId = 1
 
 -- Story 3.5 As a co-op advisor, I need to be able to add referral givers that I know to the app so that the referral seekers have as many options as possible.
 
