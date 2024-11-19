@@ -55,8 +55,12 @@ WHERE referr.company = 'target company';
 SELECT req.status FROM Requests req 
 JOIN Student.stu ON req.studentId = stu.studentId;
 
--- Story 4: As a referral seeker, I need to be able to view upcoming networking events hosted by my target companies so that I can connect with potential referrers directly.
--- NEED TO CREATE ANOTHER TABLE FOR COMPANY EVENTS???
+-- Story 4: As a referral seeker, I need to be able to view a history of my past referral requests, including their status and associated messages, so that I can track my progress and learn from previous interactions.
+SELECT Req.requestId, Req.companyName, Req.pendingStatus, Req.requestDate, Req.createdAt, Req.lastViewed, Indus.name, Mes.messageContent, Mes.sentAt
+FROM Requests Req
+LEFT JOIN Messages Mes ON Req.studentId = M.studentId AND Req.requestId = Mess.connectionId
+JOIN Industries Indus ON Req.industryId = Indus.industryId
+ORDER BY Req.requestDate DESC;
 
 -- Story 5: As a referral seeker, I need to be able to access profiles of potential referrers with their professional background and availability so that I can approach the most relevant contacts.
 SELECT r.referrerId, r.name, r.email, r.phoneNumber, r.company  i.name, c.creationDate 
