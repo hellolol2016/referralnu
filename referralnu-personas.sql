@@ -143,13 +143,13 @@ JOIN Students S ON C.studentId = S.studentId;
 -- Add a company for a referrer (ex. referrerId = 100)
 UPDATE Referrer
 SET company = 'Company 2'
-WHERE referrerId = 100;
+WHERE referrerId = 1;
 
 -- Remove a company from the list (set it to NULL)
 UPDATE Referrer
 SET company = NULL
-WHERE referrerId = 100;
-
+WHERE referrerId = 1;
+ 
 -- Story 4.3 As a person giving out referrals, I need to be able to reject or accept applications for referrals so that I can indicate who I will be giving a referral to.
 -- Accept an application
 UPDATE Requests
@@ -165,7 +165,7 @@ WHERE studentId = 1;
 -- Add or update referral requirements in the Referrer table
 UPDATE Referrer
 SET contactInfo = 'Have 2+ years of experience'
-WHERE referrerId = 100;
+WHERE referrerId = 1;
 
 -- Story 4.5 As a person giving out referrals, I need to be able to see if any of my applicants have already gotten a referral from someone else to my company.
 SELECT C.studentId, S.name AS studentName, R.company AS referredCompany, C.creationDate AS referralDate, Req.status AS applicationStatus
