@@ -153,10 +153,13 @@ WHERE referrerId = 100;
 -- Story 4.3 As a person giving out referrals, I need to be able to reject or accept applications for referrals so that I can indicate who I will be giving a referral to.
 -- Accept an application
 UPDATE Requests
-SET status = 'Accepted';
+SET status = 'Accepted'
+WHERE studentId = 1;
+
 -- Reject an application
 UPDATE Requests
-SET status = 'Rejected';
+SET status = 'Rejected'
+WHERE studentId = 1;
 
 -- Story 4.4 As a person giving out referrals, I need to be able to communicate requirements to get a referral from me so that I don’t get applicants who have no chance.
 -- Add or update referral requirements in the Referrer table
@@ -173,4 +176,5 @@ JOIN Requests Req ON Req.studentId = S.studentId AND Req.referrerId = R.referrer
 
 -- Story 4.6 As a person giving out referrals, I need to be able to add contact information, including people who can help contact or connect with me, so that people meeting me have a reference to help with interpersonal connection.
 UPDATE Referrer
-SET contactInfo = 'Email: @gmail.com';
+SET contactInfo = 'Email: @gmail.com'
+WHERE studentId = 1;
