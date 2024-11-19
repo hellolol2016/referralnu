@@ -79,7 +79,7 @@ JOIN Advisor a ON s.advisorId = a.advisorID;
 SELECT s.StudentId, s.firstName, s.lastName, r.createdAt, r.pendingStatus
 FROM Students s JOIN Advisor a ON s.advisorId = a.advisorId 
 JOIN Requests r ON s.StudentId = r.StudentId
-WHERE studentId = 1
+WHERE studentId = 1;
 
 -- Story 3.2 As a co-op advisor, I need to be able to view a dashboard of all my students’ application statuses so I can identify who is making progress and who needs assistance.
 --
@@ -90,24 +90,23 @@ SELECT s.studentId,
 FROM Students s
 LEFT JOIN Requests req ON s.studentId = req.studentId
 where s.advisorId = 1
-GROUP BY s.studentId
-
+GROUP BY s.studentId;
 
 
 -- Story 3.3 As a co-op advisor, I need to be able to communicate directly with students through the app so that I can provide timely feedback and guidance.
 
 SELECT firstName, lastName, email, phoneNumber 
 FROM Students
-WHERE studentId = 1
+WHERE studentId = 1;
 -- Story 3.4 As a co-op advisor, I need to be able to set reminders for follow-up communications with students based on their application timelines so that I can make sure they stay on track.
 
 SELECT firstName, lastName, email, phoneNumber 
 FROM Students
-WHERE studentId = 1
+WHERE studentId = 1;
 
 -- Story 3.5 As a co-op advisor, I need to be able to add referral givers that I know to the app so that the referral seekers have as many options as possible.
 
-INSERT INTO Referrer (name, email, phoneNumber, company, adminId, industryId, numReferrals)
+INSERT INTO Referrer (name, email, phoneNumber, company, adminId, industryId, numReferrals);
 
 -- Story 3.6 As a co-op advisor, I could refer students to connect with certain companies based on data visualizations that show what companies give the most referrals
 SELECT referrerId
@@ -138,7 +137,7 @@ WHERE r.companyName = (
 SELECT S.studentId, S.name AS studentName, S.contactInfo AS studentContact, R.company AS referredCompany, C.creationDate AS referralDate
 FROM Connections C
 JOIN Referrer R ON C.referrerId = R.referrerId
-JOIN Students S ON C.studentId = S.studentId
+JOIN Students S ON C.studentId = S.studentId;
 
 -- Story 4.2 As a person giving out referrals, I need to be able to include or remove the companies I can give referrals to so that I get requests from relevant job seekers.
 -- Add a company for a referrer (ex. referrerId = 100)
@@ -154,10 +153,10 @@ WHERE referrerId = 100;
 -- Story 4.3 As a person giving out referrals, I need to be able to reject or accept applications for referrals so that I can indicate who I will be giving a referral to.
 -- Accept an application
 UPDATE Requests
-SET status = 'Accepted'
+SET status = 'Accepted';
 -- Reject an application
 UPDATE Requests
-SET status = 'Rejected'
+SET status = 'Rejected';
 
 -- Story 4.4 As a person giving out referrals, I need to be able to communicate requirements to get a referral from me so that I don’t get applicants who have no chance.
 -- Add or update referral requirements in the Referrer table
@@ -170,14 +169,8 @@ SELECT C.studentId, S.name AS studentName, R.company AS referredCompany, C.creat
 FROM Connections C
 JOIN Referrer R ON C.referrerId = R.referrerId
 JOIN Students S ON C.studentId = S.studentId
-JOIN Requests Req ON Req.studentId = S.studentId AND Req.referrerId = R.referrerId
+JOIN Requests Req ON Req.studentId = S.studentId AND Req.referrerId = R.referrerId;
 
 -- Story 4.6 As a person giving out referrals, I need to be able to add contact information, including people who can help contact or connect with me, so that people meeting me have a reference to help with interpersonal connection.
 UPDATE Referrer
-SET contactInfo = 'Email: @gmail.com'
-
-
-
-
-
-
+SET contactInfo = 'Email: @gmail.com';
