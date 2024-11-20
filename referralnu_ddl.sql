@@ -104,13 +104,15 @@ CREATE TABLE Requests
 
 CREATE TABLE Advice
 {
-    studentId INT,
-    advisorId INT,
+    studentId INT NOT NULL,
+    advisorId INT NOT NULL,
     sendDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    readDate TIMESTAMP
+    readDate TIMESTAMP NULL,
     readStatus VARCHAR(50),
     content TEXT,
-    followUpDate TIMESTAMP
+    followUpDate TIMESTAMP DEFAULT (DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 3 DAY)),
+    reminderStatus VARCHAR(50),
+    PRIMARY KEY (studentId, advisorId),
     FOREIGN KEY (studentId) REFERENCES Students (studentId)
         ON UPDATE CASCADE
         ON DELETE CASCADE,
@@ -182,3 +184,12 @@ VALUES
 (1, 'Welcome to the program!', 1, 1, 1, 1),
 (2, 'Your request has been accepted.', 2, 2, 2, 2),
 (3, 'Unfortunately, your request has been rejected.', 1, 3, 1, 3);
+
+INSERT INTO Advice (studentId, advisorId, sendDate, readDate, readStatus, content, followUpDate)
+VALUES 
+(1, 101, '2024-11-16 10:00:00', NULL, 'unread', 'Meeting scheduled for next week.', '2024-11-19 10:00:00'),
+(2, 102, '2024-11-15 15:30:00', '2024-11-16 09:00:00', 'read', 'Please review the course materials.', '2024-11-18 15:30:00'),
+(3, 103, DEFAULT, NULL, 'unread', 'Your application has been submitted.', DEFAULT),
+(4, 104, DEFAULT, DEFAULT, 'read', 'Reminder: Internship application deadline.', DEFAULT),
+(5, 105, '2024-11-14 12:00:00', '2024-11-15 08:45:00', 'read', 'Final project details have been shared.', '2024-11-17 12:00:00');
+
