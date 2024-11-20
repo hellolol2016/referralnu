@@ -103,14 +103,14 @@ CREATE TABLE Requests
 );
 
 CREATE TABLE Advisor_Messages
-{
-    studentId INT,
-    advisorId INT,
-    sendDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    readDate TIMESTAMP NULL,
-    readStatus VARCHAR(50),
-    content TEXT,
-    followUpDate TIMESTAMP DEFAULT DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 3 DAY),
+(
+    studentId      INT,
+    advisorId      INT,
+    sendDate       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    readDate       TIMESTAMP NULL,
+    readStatus     VARCHAR(50),
+    content        TEXT,
+    followUpDate   TIMESTAMP DEFAULT (DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 3 DAY)),
     reminderStatus VARCHAR(50),
     PRIMARY KEY (studentId, advisorId),
     FOREIGN KEY (studentId) REFERENCES Students (studentId)
@@ -119,17 +119,17 @@ CREATE TABLE Advisor_Messages
     FOREIGN KEY (advisorId) REFERENCES Advisor (advisorId)
         ON UPDATE CASCADE
         ON DELETE CASCADE
-};
+);
 
 CREATE TABLE Company
-{
-    companyId INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(255) NOT NULL,
-    industryId INT NOT NULL,
+(
+    companyId  INT PRIMARY KEY AUTO_INCREMENT,
+    name       VARCHAR(255) NOT NULL,
+    industryId INT          NOT NULL,
     FOREIGN KEY (industryId) REFERENCES Industries (industryId)
         ON UPDATE CASCADE
         ON DELETE CASCADE
-};
+);
 
 -- Create Messages table
 CREATE TABLE Messages
@@ -197,9 +197,6 @@ VALUES
 
 INSERT INTO Advisor_Messages (studentId, advisorId, sendDate, readDate, readStatus, content, followUpDate)
 VALUES
-(1, 101, '2024-11-16 10:00:00', NULL, 'unread', 'Meeting scheduled for next week.', '2024-11-19 10:00:00'),
-(2, 102, '2024-11-15 15:30:00', '2024-11-16 09:00:00', 'read', 'Please review the course materials.', '2024-11-18 15:30:00'),
-(3, 103, DEFAULT, NULL, 'unread', 'Your application has been submitted.', DEFAULT),
-(4, 104, DEFAULT, DEFAULT, 'read', 'Reminder: Internship application deadline.', DEFAULT),
-(5, 105, '2024-11-14 12:00:00', '2024-11-15 08:45:00', 'read', 'Final project details have been shared.', '2024-11-17 12:00:00');
-
+(1, 1, '2024-11-16 10:00:00', NULL, 'unread', 'Meeting scheduled for next week.', '2024-11-19 10:00:00'),
+(2, 2, '2024-11-15 15:30:00', '2024-11-16 09:00:00', 'read', 'Please review the course materials.', '2024-11-18 15:30:00'),
+(3, 3, DEFAULT, NULL, 'unread', 'Your application has been submitted.', DEFAULT);
