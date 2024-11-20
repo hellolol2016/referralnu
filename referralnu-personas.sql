@@ -21,9 +21,7 @@ SELECT viewCount, lastViewed from Requests;
 -- Story 4: As an administrator, I need to be able to ensure that referral givers give the referral to the student they said they would so that the process’ integrity is conserved
 -- To do this, we can check the status of the connection, and check the message history between the two parties
 -- Assume we are looking at student 1 and referrer 1
-
--- Connections doesn't have a status rn. Maybe request instead?
-SELECT c.status, m.message
+SELECT m.message
 FROM Connections c
 JOIN Messages m ON c.connectionId = m.connectionId
 WHERE c.studentId = 1 AND c.referrerId = 1;
