@@ -45,6 +45,16 @@ CREATE TABLE Industries
     name       VARCHAR(255)    NOT NULL
 );
 
+CREATE TABLE Company
+(
+    companyId  INT PRIMARY KEY AUTO_INCREMENT,
+    name       VARCHAR(255) NOT NULL,
+    industryId INT          NOT NULL,
+    FOREIGN KEY (industryId) REFERENCES Industries (industryId)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+);
+
 -- Create Referrer table
 CREATE TABLE Referrer
 (
@@ -60,7 +70,7 @@ CREATE TABLE Referrer
     FOREIGN KEY (adminId) REFERENCES Admin (adminId)
         ON UPDATE CASCADE
         ON DELETE RESTRICT,
-    FOREIGN KEY (companyId) REFERENCES Industries (companyId)
+    FOREIGN KEY (companyId) REFERENCES Company (companyId)
         ON UPDATE CASCADE
         ON DELETE RESTRICT
 );
@@ -79,6 +89,8 @@ CREATE TABLE Connections
         ON UPDATE CASCADE
         ON DELETE RESTRICT
 );
+
+
 
 -- Create Requests table
 CREATE TABLE Requests
@@ -118,15 +130,7 @@ CREATE TABLE Advisor_Messages
         ON DELETE CASCADE
 );
 
-CREATE TABLE Company
-(
-    companyId  INT PRIMARY KEY AUTO_INCREMENT,
-    name       VARCHAR(255) NOT NULL,
-    industryId INT          NOT NULL,
-    FOREIGN KEY (industryId) REFERENCES Industries (industryId)
-        ON UPDATE CASCADE
-        ON DELETE CASCADE
-);
+
 
 -- Create Messages table
 CREATE TABLE Messages
@@ -173,12 +177,12 @@ INSERT INTO Company (name, industryId)
 VALUES
 ('Tech Innovators Inc.', 1),
 ('HealthFirst Solutions', 2),
-('Future Finance Co.', 3),
+('Future Finance Co.', 3);
 
-INSERT INTO Referrer (name, email, phoneNumber, company, adminId, companyId, numReferrals)
+INSERT INTO Referrer (name, email, phoneNumber, adminId, companyId, numReferrals)
 VALUES
-('David Wilson', 'davidwilson@techcorp.com', '555-6677', 'TechCorp', 1, 1, 5),
-('Rachel Adams', 'racheladams@healthcareinc.com', '555-7788', 'HealthcareInc', 2, 2, 3);
+('David Wilson', 'davidwilson@techcorp.com', '555-6677',  1, 1, 5),
+('Rachel Adams', 'racheladams@healthcareinc.com', '555-7788',  2, 2, 3);
 
 INSERT INTO Connections (referrerId, studentId)
 VALUES
