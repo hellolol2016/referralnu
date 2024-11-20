@@ -102,6 +102,23 @@ CREATE TABLE Requests
         ON DELETE CASCADE
 );
 
+CREATE TABLE Advice
+{
+    studentId INT,
+    advisorId INT,
+    sendDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    readDate TIMESTAMP
+    readStatus VARCHAR(50),
+    content TEXT,
+    followUpDate TIMESTAMP
+    FOREIGN KEY (studentId) REFERENCES Students (studentId)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    FOREIGN KEY (advisorId) REFERENCES Advisor (advisorId)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+};
+
 -- Create Messages table
 CREATE TABLE Messages
 (
