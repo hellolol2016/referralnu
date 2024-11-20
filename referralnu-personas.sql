@@ -3,7 +3,6 @@ USE referralnu;
 -- User Persona 1: Admin
 
 -- Story 1.1: As an administrator, I need to be able to verify that referral offers are from real employees so that the app doesn’t get fake referral offers.
-
 SELECT ref.name, ref.company FROM Requests req
 JOIN Referrer ref ON req.referrerId = ref.referrerId;
 
@@ -82,6 +81,7 @@ JOIN Advisor a ON s.advisorId = a.advisorID
 JOIN Advice adv ON s.studentId = adv.studentId AND a.advisorID = adv.advisorId
 where a.advisorId = 1;
 
+
 -- User Persona 3: Advisor
 
 -- Story 3.1 As an advisor, I need to monitor students' progress in their job search, specifically their application statuses and networking activities.
@@ -91,7 +91,6 @@ JOIN Requests r ON s.StudentId = r.StudentId
 WHERE studentId = 1
 
 -- Story 3.2 As a co-op advisor, I need to be able to view a dashboard of all my students’ application statuses so I can identify who is making progress and who needs assistance.
---
 SELECT s.studentId, 
        SUM(req.pendingStatus = 'Pending') AS pendingRequests,
        SUM(req.pendingStatus = 'Accepted') AS acceptedRequests,
@@ -101,10 +100,7 @@ LEFT JOIN Requests req ON s.studentId = req.studentId
 where s.advisorId = 1
 GROUP BY s.studentId
 
-
-
 -- Story 3.3 As a co-op advisor, I need to be able to communicate directly with students through the app so that I can provide timely feedback and guidance.
-
 UPDATE Advice
 SET 
     content = 'Please schedule a follow-up meeting.',
@@ -113,9 +109,7 @@ SET
 WHERE 
     studentId = 1 AND advisorId = 101;
 
-
 -- Story 3.4 As a co-op advisor, I need to be able to set reminders for follow-up communications with students based on their application timelines so that I can make sure they stay on track.
-
 UPDATE Advice
 SET 
     reminderStatus = 'pending notification'
@@ -126,7 +120,6 @@ WHERE
     AND readStatus = 'read';
 
 -- Story 3.5 As a co-op advisor, I need to be able to add referral givers that I know to the app so that the referral seekers have as many options as possible.
-
 INSERT INTO Referrer (name, email, phoneNumber, company, adminId, companyId, numReferrals)
 
 -- Story 3.6 As a co-op advisor, I could refer students to connect with certain companies based on data visualizations that show what companies give the most referrals
@@ -153,6 +146,7 @@ WHERE c.companyName = (
     ORDER BY COUNT(req.requestId) DESC
     LIMIT 1
 );
+
 
 -- User Persona 4: Referrer
 
