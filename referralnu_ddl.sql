@@ -102,7 +102,7 @@ CREATE TABLE Requests
         ON DELETE CASCADE
 );
 
-CREATE TABLE Advisor_MESSAGES
+CREATE TABLE Advisor_Messages
 {
     studentId INT,
     advisorId INT,
@@ -195,8 +195,8 @@ VALUES
 (2, 'Your request has been accepted.', 2, 2, 2, 2),
 (3, 'Unfortunately, your request has been rejected.', 1, 3, 1, 3);
 
-INSERT INTO Advice (studentId, advisorId, sendDate, readDate, readStatus, content, followUpDate)
-VALUES 
+INSERT INTO Advisor_Messages (studentId, advisorId, sendDate, readDate, readStatus, content, followUpDate)
+VALUES
 (1, 101, '2024-11-16 10:00:00', NULL, 'unread', 'Meeting scheduled for next week.', '2024-11-19 10:00:00'),
 (2, 102, '2024-11-15 15:30:00', '2024-11-16 09:00:00', 'read', 'Please review the course materials.', '2024-11-18 15:30:00'),
 (3, 103, DEFAULT, NULL, 'unread', 'Your application has been submitted.', DEFAULT),
