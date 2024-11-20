@@ -54,14 +54,13 @@ CREATE TABLE Referrer
     phoneNumber  VARCHAR(20),
     creationDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updateDate   TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    company      VARCHAR(255) NOT NULL,
     adminId      INT          NOT NULL,
-    industryId   INT          NOT NULL,
+    companyId   INT          NOT NULL,
     numReferrals INT,
     FOREIGN KEY (adminId) REFERENCES Admin (adminId)
         ON UPDATE CASCADE
         ON DELETE RESTRICT,
-    FOREIGN KEY (industryId) REFERENCES Industries (industryId)
+    FOREIGN KEY (companyId) REFERENCES Industries (companyId)
         ON UPDATE CASCADE
         ON DELETE RESTRICT
 );
@@ -73,7 +72,6 @@ CREATE TABLE Connections
     referrerId   INT NOT NULL,
     creationDate TIMESTAMP,
     studentId    INT NOT NULL,
-    companyName VARCHAR(255) NOT NULL,
     FOREIGN KEY (referrerId) REFERENCES Referrer (referrerId)
         ON UPDATE CASCADE
         ON DELETE RESTRICT,
@@ -89,15 +87,14 @@ CREATE TABLE Requests
     studentId   INT NOT NULL,
     pendingStatus      VARCHAR(50),
     requestDate TIMESTAMP,
-    industryId  INT NOT NULL,
+    companyId  INT NOT NULL,
     createdAt   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     lastViewed  TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     viewCount   INT,
-    companyName VARCHAR(255) NOT NULL,
     FOREIGN KEY (studentId) REFERENCES Students (studentId)
         ON UPDATE CASCADE
         ON DELETE CASCADE,
-    FOREIGN KEY (industryId) REFERENCES Industries (industryId)
+    FOREIGN KEY (companyId) REFERENCES Company (companyId)
         ON UPDATE CASCADE
         ON DELETE CASCADE
 );
@@ -172,22 +169,28 @@ VALUES
 (2, 'Healthcare'),
 (3, 'Finance');
 
-INSERT INTO Referrer (name, email, phoneNumber, company, adminId, industryId, numReferrals)
+INSERT INTO Company (name, industryId)
+VALUES
+('Tech Innovators Inc.', 1),
+('HealthFirst Solutions', 2),
+('Future Finance Co.', 3),
+
+INSERT INTO Referrer (name, email, phoneNumber, company, adminId, companyId, numReferrals)
 VALUES
 ('David Wilson', 'davidwilson@techcorp.com', '555-6677', 'TechCorp', 1, 1, 5),
 ('Rachel Adams', 'racheladams@healthcareinc.com', '555-7788', 'HealthcareInc', 2, 2, 3);
 
-INSERT INTO Connections (referrerId, studentId, companyName)
+INSERT INTO Connections (referrerId, studentId)
 VALUES
-(1, 1, 'Google'),
-(2, 2, 'Amazon'),
-(1, 3, 'FaceBook');
+(1, 1),
+(2, 2),
+(1, 3);
 
-INSERT INTO Requests (studentId, pendingStatus, industryId, companyName)
+INSERT INTO Requests (studentId, pendingStatus, companyId)
 VALUES
-(1, 'Pending', 1, 'Google'),
-(2,  'Accepted', 2, 'Amazon'),
-(3,  'Rejected', 3, 'FaceBook');
+(1, 'Pending', 1),
+(2,  'Accepted', 2),
+(3,  'Rejected', 3);
 
 INSERT INTO Messages (messageId, messageContent, adminId, connectionId, referrerId, studentId)
 VALUES
