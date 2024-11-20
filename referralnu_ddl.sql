@@ -104,13 +104,15 @@ CREATE TABLE Requests
 
 CREATE TABLE Advice
 {
-    studentId INT,
-    advisorId INT,
+    studentId INT NOT NULL,
+    advisorId INT NOT NULL,
     sendDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    readDate TIMESTAMP
+    readDate TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     readStatus VARCHAR(50),
     content TEXT,
-    followUpDate TIMESTAMP
+    followUpDate TIMESTAMP DEFAULT (DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 3 DAY)),
+    reminderStatus VARCHAR(50),
+    PRIMARY KEY (studentId, advisorId),
     FOREIGN KEY (studentId) REFERENCES Students (studentId)
         ON UPDATE CASCADE
         ON DELETE CASCADE,
