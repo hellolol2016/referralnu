@@ -121,6 +121,16 @@ CREATE TABLE Advice
         ON DELETE CASCADE
 };
 
+CREATE TABLE Company
+{
+    companyId INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    industryId INT NOT NULL,
+    FOREIGN KEY (industryId) REFERENCES Industries (industryId)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+};
+
 -- Create Messages table
 CREATE TABLE Messages
 (
