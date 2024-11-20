@@ -72,10 +72,11 @@ JOIN Industries i ON r.industryId = i.industryId
 ORDER BY r.company ASC;
 
 -- Story 6: As a referral seeker, I need to be able to receive guidance on how to request and approach referrals so that I can maximize my chances.
-SELECT a.advisorID,a.firstName, a.lastName, a.email, a.phoneNumber
+SELECT a.advisorID,a.firstName, a.lastName, a.email, a.phoneNumber, adv.content
 FROM Students s
-JOIN Advisor a ON s.advisorId = a.advisorID;
-where a.advisorId = 1
+JOIN Advisor a ON s.advisorId = a.advisorID
+JOIN Advice adv ON s.studentId = adv.studentId AND a.advisorID = adv.advisorId
+where a.advisorId = 1;
 
 -- User Persona 3: Advisor
 
@@ -100,13 +101,17 @@ GROUP BY s.studentId
 
 -- Story 3.3 As a co-op advisor, I need to be able to communicate directly with students through the app so that I can provide timely feedback and guidance.
 
-SELECT firstName, lastName, email, phoneNumber 
-FROM Students
+SELECT s.firstName, s.lastName, s.email, s,phoneNumber, adv.content, adv.sendDate, adv.readDate, adv.readStatus
+FROM Students s
+JOIN Advice adv ON s.studentId = adv.studentId
 WHERE studentId = 1
+
+
 -- Story 3.4 As a co-op advisor, I need to be able to set reminders for follow-up communications with students based on their application timelines so that I can make sure they stay on track.
 
-SELECT firstName, lastName, email, phoneNumber 
-FROM Students
+SELECT s.firstName, s.lastName, s.email, s.phoneNumber, adv.followUpDate
+FROM Students s
+JOIN Advice adv ON s.studentId = adv.studentId
 WHERE studentId = 1
 
 -- Story 3.5 As a co-op advisor, I need to be able to add referral givers that I know to the app so that the referral seekers have as many options as possible.
