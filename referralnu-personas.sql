@@ -101,20 +101,25 @@ GROUP BY s.studentId
 
 -- Story 3.3 As a co-op advisor, I need to be able to communicate directly with students through the app so that I can provide timely feedback and guidance.
 
-SELECT s.firstName, s.lastName, s.email, s,phoneNumber, adv.content, adv.sendDate, adv.readDate, adv.readStatus
-FROM Students s
-JOIN Advice adv ON s.studentId = adv.studentId
-WHERE studentId = 1
-
-UPDATE adv.content, adv.sendDate
+UPDATE Advice
+SET 
+    content = 'Please schedule a follow-up meeting.',
+    sendDate = CURRENT_TIMESTAMP,
+    readStatus = 'unread'
+WHERE 
+    studentId = 1 AND advisorId = 101;
 
 
 -- Story 3.4 As a co-op advisor, I need to be able to set reminders for follow-up communications with students based on their application timelines so that I can make sure they stay on track.
 
-SELECT s.firstName, s.lastName, s.email, s.phoneNumber, adv.followUpDate
-FROM Students s
-JOIN Advice adv ON s.studentId = adv.studentId
-WHERE studentId = 1
+UPDATE Advice
+SET 
+    reminderStatus = 'pending notification'
+WHERE 
+    followUpDate <= DATE_ADD(CURRENT_DATE, INTERVAL 2 DAY) 
+    AND followUpDate > CURRENT_DATE
+    AND reminderStatus IS NULL
+    AND readStatus = 'read';
 
 -- Story 3.5 As a co-op advisor, I need to be able to add referral givers that I know to the app so that the referral seekers have as many options as possible.
 

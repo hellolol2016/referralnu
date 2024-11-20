@@ -102,7 +102,7 @@ CREATE TABLE Requests
         ON DELETE CASCADE
 );
 
-CREATE TABLE Advice
+CREATE TABLE Advisor_MESSAGES
 {
     studentId INT,
     advisorId INT,
@@ -110,7 +110,7 @@ CREATE TABLE Advice
     readDate TIMESTAMP NULL,
     readStatus VARCHAR(50),
     content TEXT,
-    followUpDate TIMESTAMP DEFAULT (DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 3 DAY)),
+    followUpDate TIMESTAMP DEFAULT DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 3 DAY),
     reminderStatus VARCHAR(50),
     PRIMARY KEY (studentId, advisorId),
     FOREIGN KEY (studentId) REFERENCES Students (studentId)
