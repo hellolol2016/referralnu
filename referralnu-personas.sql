@@ -45,11 +45,11 @@ JOIN Student stu ON stu.studentId = c.studentId
 WHERE LOWER(c.companyName) = LOWER('Company Name');
 
 -- Story 2: As a referral seeker, I need to be able to request referrals from professionals within my target companies so that I can improve my chances of securing an interview.
-INSERT INTO Requests (studentId, industryId, companyName, pendingStatus, requestDate)
-SELECT stu.studentId, request.industryId, request.company, 'Pending', CURRENT_TIMESTAMP FROM Students stu
+INSERT INTO Requests (studentId, companyId, pendingStatus, requestDate)
+SELECT stu.studentId, request.companyId,, 'Pending', CURRENT_TIMESTAMP FROM Students stu
 JOIN Connections c ON stu.studentId = c.studentId
 JOIN Referrer referr ON c.referrerId = referr.referrerId
-WHERE referr.company = 'target company';
+WHERE referr.companyId = 1;
 
 -- Story 3: As a referral seeker, I need to be able to track the status of my referral requests so that I can stay informed and follow up as needed.
 SELECT req.status FROM Requests req 
@@ -57,19 +57,19 @@ JOIN Student.stu ON req.studentId = stu.studentId;
 where stu.studentId = 1
 
 -- Story 4: As a referral seeker, I need to be able to view a history of my past referral requests, including their status and associated messages, so that I can track my progress and learn from previous interactions.
-SELECT Req.requestId, Req.companyName, Req.pendingStatus, Req.requestDate, Req.createdAt, Req.lastViewed, Indus.name, Mes.messageContent, Mes.sentAt
+SELECT Req.requestId, Req.companyName, Req.pendingStatus, Req.requestDate, Req.createdAt, Req.lastViewed, Com.name, Mes.messageContent, Mes.sentAt
 FROM Requests Req
 LEFT JOIN Messages Mes ON Req.studentId = M.studentId AND Req.requestId = Mess.connectionId
-JOIN Industries Indus ON Req.industryId = Indus.industryId
+JOIN Company Com ON Req.companyId = Com.companyId
 ORDER BY Req.requestDate DESC;
 
 -- Story 5: As a referral seeker, I need to be able to access profiles of potential referrers with their professional background and availability so that I can approach the most relevant contacts.
-SELECT r.referrerId, r.name, r.email, r.phoneNumber, r.company  i.name, c.creationDate 
+SELECT r.referrerId, r.name, r.email, r.phoneNumber, com.name, c.creationDate 
 FROM Students stu
 JOIN Connections c ON stu.studentId = c.studentId
 JOIN Referrer r ON c.referrerId = r.referrerId
-JOIN Industries i ON r.industryId = i.industryId
-ORDER BY r.company ASC;
+JOIN Company com ON r.companyId = com.companyId
+ORDER BY com.name ASC;
 
 -- Story 6: As a referral seeker, I need to be able to receive guidance on how to request and approach referrals so that I can maximize my chances.
 SELECT a.advisorID,a.firstName, a.lastName, a.email, a.phoneNumber, adv.content
@@ -123,23 +123,27 @@ WHERE
 
 -- Story 3.5 As a co-op advisor, I need to be able to add referral givers that I know to the app so that the referral seekers have as many options as possible.
 
-INSERT INTO Referrer (name, email, phoneNumber, company, adminId, industryId, numReferrals)
+INSERT INTO Referrer (name, email, phoneNumber, company, adminId, companyId, numReferrals)
 
 -- Story 3.6 As a co-op advisor, I could refer students to connect with certain companies based on data visualizations that show what companies give the most referrals
-SELECT referrerId
-FROM Referrer
-WHERE companyName = (
-    SELECT companyName
-    FROM Referrer
-    GROUP BY companyName
-    ORDER BY SUM(numReferrals) DESC
+SELECT r.referrerId
+FROM Referrer r
+JOIN Company c ON r.companyId = c.companyId
+WHERE c.companyName = (
+    SELECT c.companyName
+    FROM Company c
+    JOIN Referrer r ON c.companyId = r.companyId
+    GROUP BY c.companyName
+    ORDER BY SUM(r.numReferrals) DESC
     LIMIT 1
 );
 SELECT r.referrerId
 FROM Referrer r
-WHERE r.companyName = (
+JOIN Company c ON r.companyId = c.companyId
+WHERE c.companyName = (
     SELECT req.companyName
     FROM Requests req
+    JOIN Company c ON req.companyId = c.companyId
     WHERE req.pendingStatus = 'Accepted'
     GROUP BY req.companyName
     ORDER BY COUNT(req.requestId) DESC
@@ -159,7 +163,7 @@ JOIN Students S ON C.studentId = S.studentId
 -- Story 4.2 As a person giving out referrals, I need to be able to include or remove the companies I can give referrals to so that I get requests from relevant job seekers.
 -- Add a company for a referrer (ex. referrerId = 100)
 UPDATE Referrer
-SET company = 'Company 2'
+SET companyId = 1
 WHERE referrerId = 100;
 
 -- Remove a company from the list (set it to NULL)
