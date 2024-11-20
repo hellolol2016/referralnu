@@ -6,7 +6,7 @@ USE referralnu;
 -- Create Advisor table
 CREATE TABLE Advisor
 (
-    advisorID   INT PRIMARY KEY AUTO_INCREMENT,
+    advisorId   INT PRIMARY KEY AUTO_INCREMENT,
     firstName   VARCHAR(20)  NOT NULL,
     lastName    VARCHAR(40)  NOT NULL,
     email       VARCHAR(255) NOT NULL,
@@ -104,8 +104,8 @@ CREATE TABLE Requests
 
 CREATE TABLE Advice
 {
-    studentId INT NOT NULL,
-    advisorId INT NOT NULL,
+    studentId INT,
+    advisorId INT,
     sendDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     readDate TIMESTAMP NULL,
     readStatus VARCHAR(50),

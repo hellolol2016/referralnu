@@ -21,7 +21,9 @@ SELECT viewCount, lastViewed from Requests;
 -- Story 4: As an administrator, I need to be able to ensure that referral givers give the referral to the student they said they would so that the process’ integrity is conserved
 -- To do this, we can check the status of the connection, and check the message history between the two parties
 -- Assume we are looking at student 1 and referrer 1
-SELECT m.message
+
+-- Connections doesn't have a status rn. Maybe request instead?
+SELECT c.status, m.message
 FROM Connections c
 JOIN Messages m ON c.connectionId = m.connectionId
 WHERE c.studentId = 1 AND c.referrerId = 1;
@@ -103,6 +105,8 @@ SELECT s.firstName, s.lastName, s.email, s,phoneNumber, adv.content, adv.sendDat
 FROM Students s
 JOIN Advice adv ON s.studentId = adv.studentId
 WHERE studentId = 1
+
+UPDATE adv.content, adv.sendDate
 
 
 -- Story 3.4 As a co-op advisor, I need to be able to set reminders for follow-up communications with students based on their application timelines so that I can make sure they stay on track.
