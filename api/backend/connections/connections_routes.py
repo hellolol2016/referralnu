@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from flask import Blueprint, jsonify, make_response, request, current_app
 from backend.db_connection import db
 
@@ -64,19 +62,20 @@ def create_connection():
 def delete_connections():
     try:
         body = request.get_json()
-        connectionsId = body['connectionsId']
+        connectionIds = body['connectionIds']
 
         query = '''
-        DELETE FROM connections
-        WHERE connectionsId IN (%s)
-    ''' % ','.join(['%s']) * len(connectionsId))
-
+            DELETE FROM Connections
+            WHERE connectionId IN (%s)
+        ''' % ','.join(['%s'] * len(connectionIds))
         current_app.logger.info(f'DELETE /connections query: {query}')
+
         cursor = db.get_db().cursor()
-        cursor.execute(query)
-        res = make_response(jsonify({"message": "Connection deleted"}))
+        cursor.execute(query, connectionIds)
+        db.get_db().commit()
+        res = make_response(jsonify({"message": f"Deleted {cursor.rowcount} connections successfully"}))
         res.status_code = 200
     except Exception as e:
-        res = make_response(jsonify({'error deleting connection': str(e)}))
+        res = make_response(jsonify({"error deleting connections": str(e)}))
         res.status_code = 500
     return res
