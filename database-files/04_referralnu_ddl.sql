@@ -4,7 +4,7 @@ CREATE DATABASE IF NOT EXISTS referralnu;
 USE referralnu;
 
 -- Create Advisor table
-CREATE TABLE Advisor
+CREATE TABLE Advisors
 (
     advisorId   INT PRIMARY KEY AUTO_INCREMENT,
     firstName   VARCHAR(20)  NOT NULL,
@@ -23,13 +23,13 @@ CREATE TABLE Students
     email       VARCHAR(255) NOT NULL,
     phoneNumber VARCHAR(20),
     advisorId   INT,
-    FOREIGN KEY (advisorId) REFERENCES Advisor (advisorID)
+    FOREIGN KEY (advisorId) REFERENCES Advisors (advisorID)
         ON UPDATE CASCADE
         ON DELETE RESTRICT
 );
 
 -- Create Admin table
-CREATE TABLE Admin
+CREATE TABLE Admins
 (
     adminId     INT PRIMARY KEY AUTO_INCREMENT,
     firstName   VARCHAR(20)  NOT NULL,
@@ -45,7 +45,7 @@ CREATE TABLE Industries
     name       VARCHAR(255)    NOT NULL
 );
 
-CREATE TABLE Company
+CREATE TABLE Companies
 (
     companyId  INT PRIMARY KEY AUTO_INCREMENT,
     name       VARCHAR(255) NOT NULL,
@@ -56,7 +56,7 @@ CREATE TABLE Company
 );
 
 -- Create Referrer table
-CREATE TABLE Referrer
+CREATE TABLE Referrers
 (
     referrerId   INT PRIMARY KEY AUTO_INCREMENT,
     name         VARCHAR(255) NOT NULL,
@@ -67,10 +67,10 @@ CREATE TABLE Referrer
     adminId      INT          NOT NULL,
     companyId   INT          NOT NULL,
     numReferrals INT,
-    FOREIGN KEY (adminId) REFERENCES Admin (adminId)
+    FOREIGN KEY (adminId) REFERENCES Admins (adminId)
         ON UPDATE CASCADE
         ON DELETE RESTRICT,
-    FOREIGN KEY (companyId) REFERENCES Company (companyId)
+    FOREIGN KEY (companyId) REFERENCES Companies (companyId)
         ON UPDATE CASCADE
         ON DELETE RESTRICT
 );
@@ -82,7 +82,7 @@ CREATE TABLE Connections
     referrerId   INT NOT NULL,
     creationDate TIMESTAMP,
     studentId    INT NOT NULL,
-    FOREIGN KEY (referrerId) REFERENCES Referrer (referrerId)
+    FOREIGN KEY (referrerId) REFERENCES Referrers (referrerId)
         ON UPDATE CASCADE
         ON DELETE RESTRICT,
     FOREIGN KEY (studentId) REFERENCES Students (studentId)
@@ -106,7 +106,7 @@ CREATE TABLE Requests
     FOREIGN KEY (studentId) REFERENCES Students (studentId)
         ON UPDATE CASCADE
         ON DELETE CASCADE,
-    FOREIGN KEY (companyId) REFERENCES Company (companyId)
+    FOREIGN KEY (companyId) REFERENCES Companies (companyId)
         ON UPDATE CASCADE
         ON DELETE CASCADE
 );
@@ -125,7 +125,7 @@ CREATE TABLE Advisor_Messages
     FOREIGN KEY (studentId) REFERENCES Students (studentId)
         ON UPDATE CASCADE
         ON DELETE CASCADE,
-    FOREIGN KEY (advisorId) REFERENCES Advisor (advisorId)
+    FOREIGN KEY (advisorId) REFERENCES Advisors (advisorId)
         ON UPDATE CASCADE
         ON DELETE CASCADE
 );
@@ -142,7 +142,7 @@ CREATE TABLE Messages
     connectionId   INT             NOT NULL,
     referrerId     INT             NOT NULL,
     studentId      INT             NOT NULL,
-    FOREIGN KEY (adminId) REFERENCES Admin (adminId)
+    FOREIGN KEY (adminId) REFERENCES Admins (adminId)
         ON UPDATE CASCADE
         ON DELETE CASCADE,
     FOREIGN KEY (referrerId, studentId) REFERENCES Connections (referrerId, studentId)
@@ -150,7 +150,7 @@ CREATE TABLE Messages
         ON DELETE CASCADE
 );
 
-INSERT INTO Advisor (firstName, lastName, email, phoneNumber, college)
+INSERT INTO Advisors (firstName, lastName, email, phoneNumber, college)
 VALUES
 ('John', 'Doe', 'johndoe@example.com', '555-1234', 'Harvard University'),
 ('Jane', 'Smith', 'janesmith@example.com', '555-5678', 'MIT'),
@@ -162,7 +162,7 @@ VALUES
 ('Bob', 'Brown', 'bobbrown@example.com', '555-2233', 2),
 ('Charlie', 'White', 'charliewhite@example.com', '555-3344', 3);
 
-INSERT INTO Admin (firstName, lastName, email, phoneNumber)
+INSERT INTO Admins (firstName, lastName, email, phoneNumber)
 VALUES
 ('Sarah', 'Lee', 'sarahlee@example.com', '555-4455'),
 ('Tom', 'Walker', 'tomwalker@example.com', '555-5566');
@@ -173,13 +173,13 @@ VALUES
 (2, 'Healthcare'),
 (3, 'Finance');
 
-INSERT INTO Company (name, industryId)
+INSERT INTO Companies (name, industryId)
 VALUES
 ('Tech Innovators Inc.', 1),
 ('HealthFirst Solutions', 2),
 ('Future Finance Co.', 3);
 
-INSERT INTO Referrer (name, email, phoneNumber, adminId, companyId, numReferrals)
+INSERT INTO Referrers (name, email, phoneNumber, adminId, companyId, numReferrals)
 VALUES
 ('David Wilson', 'davidwilson@techcorp.com', '555-6677',  1, 1, 5),
 ('Rachel Adams', 'racheladams@healthcareinc.com', '555-7788',  2, 2, 3);

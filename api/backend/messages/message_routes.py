@@ -24,25 +24,27 @@ def delete_message(id):
         res.status_code = 500
     return res
 
-@messages.route("/conversation/<connectionId>", methods=["GET"])
-def get_conversation(connectionId):
-    query = f'''
-        SELECT m.id, 
-               m.messageContent, 
-               m.sentAt, 
-               m.senderId, 
-               m.receiverId, 
-               c.connectionId
-        FROM Messages m
-        JOIN Connections c ON m.connectionId = c.connectionId
-        WHERE c.connectionId = {connectionId}
-        ORDER BY m.sentAt 
+@messages.route("/conversation/<referrerId>/<studentId>", methods=["GET"])
+def get_conversation(referrerId, studentId):
+    query = '''
+      SELECT m.messageId, 
+              m.messageContent, 
+              m.sentAt, 
+              m.studentId, 
+              m.referrerId, 
+              c.referrerId,
+              c.studentId
+      FROM Messages m
+      JOIN Connections c ON m.referrerId = c.referrerId AND m.studentId = c.studentId
+      WHERE c.referrerId = %s AND c.studentId = %s
+      ORDER BY m.sentAt 
     '''
+
     current_app.logger.info(f'GET conversation/<connectionId> query: {query}')
 
     try:
         cursor = db.get_db().cursor()
-        cursor.execute(query)
+        cursor.execute(query,(referrerId, studentId))
         data = cursor.fetchall()
         res = make_response(jsonify(data))
         res.status_code = 200

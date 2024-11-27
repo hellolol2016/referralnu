@@ -1,19 +1,19 @@
 from flask import Blueprint, jsonify, make_response, request, current_app
 from backend.db_connection import db
 
-referrers = Blueprint('referrers', __name__)
+referrers = Blueprint('Referrers', __name__)
 
 
 @referrers.route("/referrers", methods=["GET"])
 def get_referrers():
     query = '''
-        SELECT r.referrer_id, 
-               r.referrer_name, 
-               r.referrer_email,
+        SELECT r.referrerId, 
+               r.name, 
+               r.email,
                r.numReferrals,
                c.name as company_name
-        FROM referrers r
-        JOIN companies c ON referrers.companyId = companies.companyId
+        FROM Referrers r
+        JOIN Companies c ON r.companyId = c.companyId
     '''
 
     try:
@@ -45,9 +45,9 @@ def create_referrer():
 
     #not sure if query inserting None is ok 
     query = f'''
-        INSERT INTO referrers (referrer_name, 
-                               referrer_email, 
-                               referrer_phone, 
+        INSERT INTO Referrers (name, 
+                               email, 
+                               phone, 
                                adminId, 
                                companyId, 
                                numReferrals)
