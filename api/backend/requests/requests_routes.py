@@ -151,3 +151,32 @@ def get_requests():
         res.status_code = 500
 
     return res
+
+@requests.route("/requests/<requestId>", methods=["POST"])
+def create_request():
+
+    req = request.json
+    current_app.logger.info(req)
+
+    studentId = req.get("studentId")
+    referralId = req.get("referralId")
+
+    query = f"""
+        INSERT INTO Connections (referralId, studentId)
+        VALUES ({referralId}, {studentId})
+    """
+
+    current_app.logger.info(query)
+
+    try:
+        cursor = db.get_db().cursor()
+        cursor.execute(query)
+        db.get_db().commit()
+        res = make_response(jsonify({"message": "Connection created successfully"}))
+        res.status_code = 201
+    except Exception as e:
+        current_app.logger.error(f"Error creating connection: {str(e)}")
+        res = make_response(jsonify({"error": str(e)}))
+        res.status_code = 500
+
+    return res
