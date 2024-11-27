@@ -180,3 +180,34 @@ def create_request():
         res.status_code = 500
 
     return res
+
+@requests.route("/requests/<requestId>", methods=["PUT"])
+def create_request():
+
+    req = request.json
+    current_app.logger.info(req)
+
+    status = req.get("status")
+    requestId = req.get("requestId")
+
+    query = """
+        UPDATE Requests
+        SET status = {status}
+        WHERE requestId = {requestId}
+    """
+
+    current_app.logger.info(f'PUT /requests/<referrerId> query: {query}')
+
+    try:
+        cursor = db.get_db().cursor()
+        cursor.execute(query, (status, requestId))
+        db.get_db().commit()
+
+        res = make_response(jsonify({"message": f"Request status updated to '{status}' successfully"}))
+        res.status_code = 200
+    except Exception as e:
+        current_app.logger.error(f"Error updating request status: {str(e)}")
+        res = make_response(jsonify({"error": str(e)}))
+        res.status_code = 500
+
+    return res
