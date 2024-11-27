@@ -125,3 +125,29 @@ def get_requests_by_referrer(referrerId):
         res = make_response(jsonify({"error fetching requests by referrer": str(e)}))
         res.status_code = 500
     return res
+
+@requests.route("/requests/<requestId>", methods=["GET"])
+def get_requests():
+
+    query = '''
+        SELECT Req.requestId, 
+        Req.companyName, 
+        Req.pendingStatus, 
+        Req.requestDate, 
+        Req.createdAt, 
+        Req.lastViewed, 
+        FROM Requests Req
+        ORDER BY Req.requestDate DESC;
+    '''
+
+    try:
+        cursor = db.get_db().cursor()
+        cursor.execute(query)
+        data = cursor.fetchall()
+        res = make_response(jsonify(data))
+        res.status_code = 200
+    except Exception as e:
+        res = make_response(jsonify({"error": str(e)}))
+        res.status_code = 500
+
+    return res
