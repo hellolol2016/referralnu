@@ -211,3 +211,25 @@ def create_request():
         res.status_code = 500
 
     return res
+
+@requests.route("/requests/<referrerId>", methods=["GET"])
+def get_requests():
+
+    query = '''
+        SELECT S.studentId, S.name AS studentName, S.contactInfo AS studentContact, R.company AS referredCompany, C.creationDate AS referralDate
+        FROM Connections C
+        JOIN Referrer R ON C.referrerId = R.referrerId
+        JOIN Students S ON C.studentId = S.studentId
+    '''
+
+    try:
+        cursor = db.get_db().cursor()
+        cursor.execute(query)
+        data = cursor.fetchall()
+        res = make_response(jsonify(data))
+        res.status_code = 200
+    except Exception as e:
+        res = make_response(jsonify({"error": str(e)}))
+        res.status_code = 500
+
+    return res
