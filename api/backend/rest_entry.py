@@ -5,6 +5,7 @@ from backend.customers.customer_routes import customers
 from backend.products.products_routes import products
 from backend.referrers.referrer_routes import referrers
 from backend.simple.simple_routes import simple_routes
+from backend.messages.message_routes import messages
 import os
 from dotenv import load_dotenv
 
@@ -44,6 +45,7 @@ def create_app():
     app.register_blueprint(customers,   url_prefix='/c')
     app.register_blueprint(products,    url_prefix='/p')
     app.register_blueprint(referrers,    url_prefix='/r')
+    app.register_blueprint(messages,    url_prefix='/m')
 
     # Don't forget to return the app object
     return app
