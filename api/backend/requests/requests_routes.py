@@ -93,3 +93,35 @@ def delete_requests():
         res = make_response(jsonify({"error deleting requests": str(e)}))
         res.status_code = 500
     return res
+
+@requests.route("/requests/<referrerId>", methods=["GET"])
+def get_requests_by_referrer(referrerId):
+
+    query = '''
+        SELECT C.studentId, 
+        S.name AS studentName, 
+        R.company AS referredCompany, 
+        C.creationDate AS referralDate, 
+        Req.status AS applicationStatus
+        FROM Connections C
+        JOIN Referrer R 
+        ON C.referrerId = R.referrerId
+        JOIN Students S 
+        ON C.studentId = S.studentId
+        JOIN Requests Req 
+        ON Req.studentId = S.studentId 
+        AND Req.referrerId = R.referrerId
+    '''
+
+    current_app.logger.info(f'GET /requests/<referrerId> query: {query}')
+
+    try:
+        cursor = db.get_db().cursor()
+        cursor.execute(query, (referrerId))
+        data = cursor.fetchall()
+        res = make_response(jsonify(data))
+        res.status_code = 200
+    except Exception as e:
+        res = make_response(jsonify({"error fetching requests by referrer": str(e)}))
+        res.status_code = 500
+    return res
