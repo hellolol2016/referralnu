@@ -71,3 +71,25 @@ def create_request():
         res.status_code = 500
 
     return res
+
+@requests.route("/requests", methods=["DELETE"])
+def delete_requests():
+    try:
+        body = request.get_json()
+        requestIds = body['requestIds']
+
+        query = '''
+            DELETE FROM Requests
+            WHERE requestId IN (%s)
+        ''' % ','.join(['%s'] * len(requestIds))
+        current_app.logger.info(f'DELETE /requests query: {query}')
+
+        cursor = db.get_db().cursor()
+        cursor.execute(query, requestIds)
+        db.get_db().commit()
+        res = make_response(jsonify({"message": f"Deleted {cursor.rowcount} requests successfully"}))
+        res.status_code = 200
+    except Exception as e:
+        res = make_response(jsonify({"error deleting requests": str(e)}))
+        res.status_code = 500
+    return res
