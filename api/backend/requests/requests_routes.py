@@ -36,3 +36,38 @@ def get_requests():
         res.status_code = 500
 
     return res
+
+@requests.route("/requests", methods=["POST"])
+def create_request():
+
+    req = request.json
+    current_app.logger.info(req)
+
+    # Extract and validate required fields
+    studentId = req.get("studentId")
+    adminId = req.get("adminId")
+
+    # Optional fields
+    description = req.get("description", "")
+    # Default status is "Pending"?
+    status = req.get("status", "Pending")
+
+    query = f"""
+        INSERT INTO Requests (studentId, adminId, description, status)
+        VALUES ({studentId}, {adminId}, '{description}', '{status}')
+    """
+
+    current_app.logger.info(query)
+
+    try:
+        cursor = db.get_db().cursor()
+        cursor.execute(query)
+        db.get_db().commit()
+        res = make_response(jsonify({"message": "Request created successfully"}))
+        res.status_code = 201
+    except Exception as e:
+        current_app.logger.error(f"Error creating request: {str(e)}")
+        res = make_response(jsonify({"error": str(e)}))
+        res.status_code = 500
+
+    return res
