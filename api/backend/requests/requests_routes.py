@@ -292,3 +292,33 @@ def get_student_requests(studentId):
         res.status_code = 500
 
     return res
+
+@requests.route("/requests/<status>", methods=["GET"])
+def get_requests_by_status(status):
+    query = """
+        SELECT 
+            r.requestId, 
+            r.studentId, 
+            r.referrerId, 
+            r.status, 
+            r.submissionDate, 
+            s.name AS studentName, 
+            ref.name AS referrerName
+        FROM Requests r
+        JOIN Students s ON r.studentId = s.studentId
+        JOIN Referrers ref ON r.referrerId = ref.referrerId
+        WHERE r.status = %s
+    """
+    current_app.logger.info(f"GET /requests/{status} query: {query}")
+
+    try:
+        cursor = db.get_db().cursor()
+        cursor.execute(query)
+        data = cursor.fetchall()
+        res = make_response(jsonify(data))
+        res.status_code = 200
+    except Exception as e:
+        res = make_response(jsonify({"error": str(e)}))
+        res.status_code = 500
+
+    return res
