@@ -70,7 +70,7 @@ def create_referrer():
     return res
 
 
-@referrers.route("/referrers/<referrId>", methods=["PUT"])
+@referrers.route("/referrers/<referrerId>", methods=["PUT"])
 def create_request():
 
     req = request.json
@@ -86,7 +86,7 @@ def create_request():
         WHERE referrerId = {referrerId}
     """
 
-    current_app.logger.info(f'PUT /referrers/<referrId> query: {query}')
+    current_app.logger.info(f'PUT /referrers/<referrerId> query: {query}')
 
     try:
         cursor = db.get_db().cursor()
