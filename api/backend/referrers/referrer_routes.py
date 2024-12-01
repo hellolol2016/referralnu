@@ -68,3 +68,36 @@ def create_referrer():
         res.status_code = 500
 
     return res
+
+
+@referrers.route("/referrers/<referrerId>", methods=["PUT"])
+def create_request():
+
+    req = request.json
+    current_app.logger.info(req)
+
+    companyId = req.get("companyId")
+    contactInfo = req.get("contactInfo")
+    referrerId = req.get("referrerId")
+
+    query = """
+        UPDATE Referrer
+        SET companyId = {companyId}, contactInfo = {contactInfo}
+        WHERE referrerId = {referrerId}
+    """
+
+    current_app.logger.info(f'PUT /referrers/<referrerId> query: {query}')
+
+    try:
+        cursor = db.get_db().cursor()
+        cursor.execute(query, (companyId, contactInfo, referrerId))
+        db.get_db().commit()
+
+        res = make_response(jsonify({"message": f"Updated successful"}))
+        res.status_code = 200
+    except Exception as e:
+        current_app.logger.error(f"Error updating referrer details: {str(e)}")
+        res = make_response(jsonify({"error": str(e)}))
+        res.status_code = 500
+
+    return res
