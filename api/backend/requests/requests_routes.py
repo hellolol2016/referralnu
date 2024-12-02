@@ -120,8 +120,8 @@ def get_requests_by_referrer(referrerId):
         res.status_code = 500
     return res
 
-@requests.route("/requests/<requestId>", methods=["GET"])
-def get_referral_request_info():
+@requests.route("/referral/<requestId>", methods=["GET"])
+def get_referral_request_info(requestId):
 
     query = '''
         SELECT 
@@ -130,16 +130,17 @@ def get_referral_request_info():
         Req.pendingStatus, 
         Req.requestDate, 
         Req.createdAt, 
-        Req.lastViewed, 
+        Req.lastViewed 
         FROM Requests Req
         JOIN Companies Com 
         ON Req.companyId = Com.companyId
-        ORDER BY Req.requestDate DESC;
+        WHERE Req.requestId = %s
+        ORDER BY Req.requestDate DESC; 
     '''
 
     try:
         cursor = db.get_db().cursor()
-        cursor.execute(query)
+        cursor.execute(query, (requestId,))
         data = cursor.fetchall()
         res = make_response(jsonify(data))
         res.status_code = 200
@@ -261,7 +262,7 @@ def get_request_company(companyId):
 
 #     return res
 
-@requests.route("/requests/<studentId>", methods=["GET"])
+@requests.route("/requests/student/<studentId>", methods=["GET"])
 def get_student_requests(studentId):
     query = """
             SELECT S.studentId, 
