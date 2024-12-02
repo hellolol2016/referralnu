@@ -8,7 +8,6 @@ def get_requests():
 
     query = '''
         SELECT Req.requestId, 
-        Req.companyName, 
         Req.pendingStatus, 
         Req.requestDate, 
         Req.createdAt, 
@@ -18,8 +17,8 @@ def get_requests():
         Mes.sentAt
         FROM Requests Req
         LEFT JOIN Messages Mes 
-        ON Req.studentId = M.studentId 
-        AND Req.requestId = Mess.connectionId
+        ON Req.studentId = Mes.studentId 
+        AND Req.requestId = Mes.connectionId
         JOIN Companies Com 
         ON Req.companyId = Com.companyId
         ORDER BY Req.requestDate DESC;
@@ -131,12 +130,14 @@ def get_referral_request_info():
 
     query = '''
         SELECT Req.requestId, 
-        Req.companyName, 
+        Com.name, 
         Req.pendingStatus, 
         Req.requestDate, 
         Req.createdAt, 
         Req.lastViewed, 
         FROM Requests Req
+        JOIN Companies Com 
+        ON Req.companyId = Com.companyId
         ORDER BY Req.requestDate DESC;
     '''
 
