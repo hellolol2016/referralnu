@@ -153,7 +153,7 @@ def get_referral_request_info():
 
     return res
 
-@requests.route("/requests/<requestId>", methods=["POST"])
+@requests.route("/requests/connections/<requestId>", methods=["POST"])
 def create_connections():
 
     req = request.json
