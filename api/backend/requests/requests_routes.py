@@ -208,18 +208,19 @@ def update_request_status():
     return res
 
 @requests.route("/requests/company/<companyId>", methods=["GET"])
-def get_request_company():
+def get_request_company(companyId):
 
     query = '''
-        SELECT S.studentId, S.name AS studentName, S.contactInfo AS studentContact, R.company AS referredCompany, C.creationDate AS referralDate
+        SELECT S.studentId, S.firstName, S.lastName, S.phoneNumber, S.email, R.companyId AS referredCompany, C.creationDate AS referralDate
         FROM Connections C
-        JOIN Referrer R ON C.referrerId = R.referrerId
+        JOIN Referrers R ON C.referrerId = R.referrerId
         JOIN Students S ON C.studentId = S.studentId
+        WHERE R.companyId = %s
     '''
 
     try:
         cursor = db.get_db().cursor()
-        cursor.execute(query)
+        cursor.execute(query, (companyId,))
         data = cursor.fetchall()
         res = make_response(jsonify(data))
         res.status_code = 200
