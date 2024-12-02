@@ -14,7 +14,7 @@ def get_students_by_advisor(advisorId):
         SUM(req.pendingStatus = 'Rejected') AS rejectedRequests
         FROM Students s
         LEFT JOIN Requests req ON s.studentId = req.studentId
-        WHERE s.advisorId = {advisorId}
+        WHERE s.advisorId = %s
         GROUP BY s.studentId
     '''
 
@@ -22,7 +22,7 @@ def get_students_by_advisor(advisorId):
 
     try:
         cursor = db.get_db().cursor()
-        cursor.execute(query, (advisorId))
+        cursor.execute(query, (advisorId,))
         data = cursor.fetchall()
         res = make_response(jsonify(data))
         res.status_code = 200
@@ -108,8 +108,6 @@ def send_message(studentId):
     content = req.get("content")
 
     
-    
-
     query = '''
         INSERT INTO Advisor_Messages (content, advisorId, studentId)
         VALUES ('{content}', {advisorId}, {studentId})
@@ -119,7 +117,7 @@ def send_message(studentId):
 
     try:
         cursor = db.get_db().cursor()
-        cursor.execute(query, (advisorId, studentId, content))
+        cursor.execute(query, (content, advisorId, studentId))
         db.get_db().commit()
 
         res = make_response(jsonify({"message": f"Updated successful"}))
