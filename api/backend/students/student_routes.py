@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, make_response, request, current_app
 from backend.db_connection import db
 from datetime import datetime
 
-students = Blueprint('student', __name__)
+students = Blueprint('Students', __name__)
 
 @students.route('/students/<advisorId>', methods = ['GET'])
 def get_students_by_advisor(advisorId):
