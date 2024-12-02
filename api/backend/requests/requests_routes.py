@@ -182,27 +182,25 @@ def create_connections(requestId):
 
     return res
 
-@requests.route("/requests/status/<requestId>", methods=["PUT"])
-def update_request_status():
-
+@requests.route("/status/<int:requestId>", methods=["PUT"])
+def update_request_status(requestId):
     req = request.json
     current_app.logger.info(req)
 
-    status = req.get("status")
-    requestId = req.get("requestId")
+    pendingStatus = req.get("pendingStatus", "pending")
 
     query = """
         UPDATE Requests
-        SET status = {status}
-        WHERE requestId = {requestId}
+        SET pendingStatus = %s
+        WHERE requestId = %s
     """
 
     try:
         cursor = db.get_db().cursor()
-        cursor.execute(query, (status, requestId))
+        cursor.execute(query, (pendingStatus, requestId))
         db.get_db().commit()
 
-        res = make_response(jsonify({"message": f"Request status updated to '{status}' successfully"}))
+        res = make_response(jsonify({"message": f"Request status updated to '{pendingStatus}' successfully"}))
         res.status_code = 200
     except Exception as e:
         current_app.logger.error(f"Error updating request status: {str(e)}")
@@ -211,7 +209,7 @@ def update_request_status():
 
     return res
 
-@requests.route("/requests/company/<companyId>", methods=["GET"])
+@requests.route("/company/<companyId>", methods=["GET"])
 def get_request_company(companyId):
 
     query = '''
