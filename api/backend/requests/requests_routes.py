@@ -3,7 +3,7 @@ from backend.db_connection import db
 
 requests = Blueprint('Requests', __name__)
 
-@requests.route("/requests", methods=["GET"])
+@requests.route("/", methods=["GET"])
 def get_requests():
 
     query = '''
@@ -263,25 +263,27 @@ def get_request_company(companyId):
 
 #     return res
 
-@requests.route("/requests/student/<studentId>", methods=["GET"])
+@requests.route("/student/<studentId>", methods=["GET"])
 def get_student_requests(studentId):
     query = """
             SELECT S.studentId, 
-            S.name AS studentName, 
-            S.contactInfo AS studentContact, 
-            R.company AS referredCompany, 
+            S.firstName,
+            S.lastName, 
+            S.phoneNumber,
+            S.email,
+            R.companyId AS referredCompany, 
             C.creationDate AS referralDate
             FROM Connections C
-            JOIN Referrer R ON C.referrerId = R.referrerId
+            JOIN Referrers R ON C.referrerId = R.referrerId
             JOIN Students S ON C.studentId = S.studentId
-            WHERE r.studentId = %s
+            WHERE S.studentId = %s
         """
 
-    current_app.logger.info(f"GET /requests/{studentId} query: {query}")
+    current_app.logger.info(f"GET /student/{studentId} query: {query}")
 
     try:
         cursor = db.get_db().cursor()
-        cursor.execute(query)
+        cursor.execute(query, (studentId,))
         data = cursor.fetchall()
         res = make_response(jsonify(data))
         res.status_code = 200
