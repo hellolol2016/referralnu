@@ -49,7 +49,7 @@ def create_app():
     app.register_blueprint(customers,   url_prefix='/c')
     app.register_blueprint(products,    url_prefix='/p')
     app.register_blueprint(referrers,    url_prefix='/r')
-    app.register_blueprint(messages,    url_prefix='/m')
+    app.register_blueprint(messages,    url_prefix='/mes')
     app.register_blueprint(requests,    url_prefix='/req')
     app.register_blueprint(connections,    url_prefix='/con')
     app.register_blueprint(advisor,      url_prefix='/a')

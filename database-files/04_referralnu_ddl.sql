@@ -78,7 +78,7 @@ CREATE TABLE Referrers
 -- Create Connections table
 CREATE TABLE Connections
 (
-    connectionId PRIMARY KEY AUTO_INCREMENT,
+    connectionId INT PRIMARY KEY AUTO_INCREMENT,
     referrerId   INT NOT NULL,
     creationDate TIMESTAMP,
     studentId    INT NOT NULL,
@@ -121,7 +121,7 @@ CREATE TABLE Advisor_Messages
     content        TEXT NOT NULL,
     followUpDate   TIMESTAMP DEFAULT (DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 3 DAY)),
     reminderStatus ENUM('pending', 'sent', 'none') DEFAULT 'none',
-    messageId      INT AUTO_INCREMENT Primary Key
+    messageId      INT AUTO_INCREMENT PRIMARY KEY,
     FOREIGN KEY (studentId) REFERENCES Students (studentId)
         ON UPDATE CASCADE
         ON DELETE CASCADE,
@@ -135,17 +135,18 @@ CREATE TABLE Advisor_Messages
 -- Create Messages table
 CREATE TABLE Messages
 (
-    messageId      INT PRIMARY KEY NOT NULL,
+    messageId      INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     messageContent TEXT            NOT NULL,
     adminId        INT             NOT NULL,
     sentAt         TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     connectionId   INT             NOT NULL,
     referrerId     INT             NOT NULL,
     studentId      INT             NOT NULL,
+    studentSent    BOOLEAN         NOT NULL,
     FOREIGN KEY (adminId) REFERENCES Admins (adminId)
         ON UPDATE CASCADE
         ON DELETE CASCADE,
-    FOREIGN KEY (referrerId, studentId) REFERENCES Connections (referrerId, studentId)
+    FOREIGN KEY (connectionId) REFERENCES Connections (connectionId)
         ON UPDATE CASCADE
         ON DELETE CASCADE
 );
@@ -198,11 +199,12 @@ VALUES
 (2,  'Accepted', 2),
 (3,  'Rejected', 3);
 
-INSERT INTO Messages (messageId, messageContent, adminId, connectionId, referrerId, studentId)
+INSERT INTO Messages (messageContent, adminId, connectionId, referrerId, studentId,studentSent)
 VALUES
-(1, 'Welcome to the program!', 1, 1, 1, 1),
-(2, 'Your request has been accepted.', 2, 2, 2, 2),
-(3, 'Unfortunately, your request has been rejected.', 1, 3, 1, 3);
+('Welcome to the program!', 1, 1, 1, 1, false),
+('Your request has been accepted.', 2, 2, 2, 2, false),
+('Unfortunately, your request has been rejected.', 1, 3, 1, 3,false),
+('GOSH DANG IT!', 1, 3, 1, 3,true);
 
 INSERT INTO Advisor_Messages (studentId, advisorId, sendDate, readDate, readStatus, content, followUpDate)
 VALUES

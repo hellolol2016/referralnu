@@ -16,11 +16,37 @@ def delete_message(id):
     try:
         cursor = db.get_db().cursor()
         cursor.execute(query)
+        db.get_db().commit()
         #data = cursor.fetchall()
         res = make_response(jsonify({"message": "Message deleted"}))
         res.status_code = 200
     except Exception as e:
         res = make_response(jsonify({"error deleting message": str(e)}))
+        res.status_code = 500
+    return res
+
+@messages.route("/conversation/<referrerId>/<studentId>", methods=["POST"])
+def add_message(referrerId, studentId):
+    messageContent = request.get("messageContent")
+    adminId = request.get("adminId", 1)
+    connectionId = request.get("connectionId")
+    studentSent = request.get("studentSent", False)
+    query = f'''
+        INSERT INTO Messages (messageContent, adminId, connectionId, referrerId, studentId,studentSent)
+        VALUES
+        ({messageContent}, {adminId}, {connectionId}, {referrerId}, {studentId}, {studentSent}),
+    '''
+
+    current_app.logger.info(f'POST conversation/<connectionId> query: {query}')
+
+    try:
+        cursor = db.get_db().cursor()
+        cursor.execute(query,(referrerId, studentId))
+        db.get_db().commit()
+        res = make_response(jsonify({"message": "Message added"}))
+        res.status_code = 200
+    except Exception as e:
+        res = make_response(jsonify({"error fetching conversation": str(e)}))
         res.status_code = 500
     return res
 
@@ -56,14 +82,15 @@ def get_conversation(referrerId, studentId):
 @messages.route("/student/<studentId>", methods=["GET"])
 def get_student_messages(studentId):
     query = f'''
-        SELECT m.id, 
+        SELECT m.messageId, 
                m.messageContent, 
                m.sentAt, 
-               m.senderId, 
-               m.receiverId, 
-               c.connectionId
+               m.referrerId, 
+               m.studentId, 
+               m.connectionId
         FROM Messages m
-        WHERE m.senderId = {studentId}
+        WHERE m.studentId = {studentId}
+        AND m.studentSent = true
         ORDER BY m.sentAt 
     '''
     current_app.logger.info(f'GET student/<studentId> query: {query}')
@@ -76,6 +103,25 @@ def get_student_messages(studentId):
         res.status_code = 200
     except Exception as e:
         res = make_response(jsonify({"error fetching student messages": str(e)}))
+        res.status_code = 500
+    return res
+
+@messages.route("/<keyword>", methods=["DELETE"])
+def remove_bad_messages(keyword):
+    query = f'''
+        DELETE FROM Messages m
+        WHERE m.messageContent LIKE '%{keyword}%'
+    '''
+    current_app.logger.info(f'DELETE /<keyword> query: {query}')
+
+    try:
+        cursor = db.get_db().cursor()
+        cursor.execute(query)
+        db.get_db().commit()
+        res = make_response(jsonify({"message": ("Messages with %s deleted", keyword)}))
+        res.status_code = 200
+    except Exception as e:
+        res = make_response(jsonify({"error fetching referrer messages": str(e)}))
         res.status_code = 500
     return res
 
