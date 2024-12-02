@@ -54,8 +54,6 @@ def create_referrer():
         VALUES (%s, %s, %s, %s, %s, %s)
     '''
 
-    
-
     current_app.logger.info(query)
     try:
         cursor = db.get_db().cursor()
@@ -70,27 +68,28 @@ def create_referrer():
     return res
 
 
-@referrers.route("/referrers/<referrerId>", methods=["PUT"])
-def create_request():
+@referrers.route("/<referrerId>", methods=["PUT"])
+def create_request(referrerId):
 
     req = request.json
     current_app.logger.info(req)
 
     companyId = req.get("companyId")
-    contactInfo = req.get("contactInfo")
+    email = req.get("email","")
+    phoneNumber = req.get("phoneNumber","")
     referrerId = req.get("referrerId")
 
     query = """
-        UPDATE Referrer
-        SET companyId = {companyId}, contactInfo = {contactInfo}
-        WHERE referrerId = {referrerId}
+        UPDATE Referrers
+        SET companyId = %s, email = %s, phoneNumber = %s
+        WHERE referrerId = %s
     """
 
-    current_app.logger.info(f'PUT /referrers/<referrerId> query: {query}')
+    current_app.logger.info(f'PUT /<referrerId> query: {query}')
 
     try:
         cursor = db.get_db().cursor()
-        cursor.execute(query, (companyId, contactInfo, referrerId))
+        cursor.execute(query, (companyId, email, phoneNumber, referrerId))
         db.get_db().commit()
 
         res = make_response(jsonify({"message": f"Updated successful"}))
