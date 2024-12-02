@@ -20,7 +20,7 @@ def get_requests():
         LEFT JOIN Messages Mes 
         ON Req.studentId = M.studentId 
         AND Req.requestId = Mess.connectionId
-        JOIN Company Com 
+        JOIN Companies Com 
         ON Req.companyId = Com.companyId
         ORDER BY Req.requestDate DESC;
     '''
@@ -94,7 +94,7 @@ def delete_requests():
         res.status_code = 500
     return res
 
-@requests.route("/requests/<referrerId>", methods=["GET"])
+@requests.route("/requests/referrer/<referrerId>", methods=["GET"])
 def get_requests_by_referrer(referrerId):
 
     query = '''
@@ -113,7 +113,7 @@ def get_requests_by_referrer(referrerId):
         AND Req.referrerId = R.referrerId
     '''
 
-    current_app.logger.info(f'GET /requests/<referrerId> query: {query}')
+    current_app.logger.info(f'GET /requests/referrer/<referrerId> query: {query}')
 
     try:
         cursor = db.get_db().cursor()
@@ -127,7 +127,7 @@ def get_requests_by_referrer(referrerId):
     return res
 
 @requests.route("/requests/<requestId>", methods=["GET"])
-def get_requests():
+def get_referral_request_info():
 
     query = '''
         SELECT Req.requestId, 
@@ -153,7 +153,7 @@ def get_requests():
     return res
 
 @requests.route("/requests/<requestId>", methods=["POST"])
-def create_request():
+def create_connections():
 
     req = request.json
     current_app.logger.info(req)
@@ -182,7 +182,7 @@ def create_request():
     return res
 
 @requests.route("/requests/<requestId>", methods=["PUT"])
-def create_request():
+def update_request_status():
 
     req = request.json
     current_app.logger.info(req)
@@ -210,7 +210,7 @@ def create_request():
 
     return res
 
-@requests.route("/requests/<companyId>", methods=["GET"])
+@requests.route("/requests/company/<companyId>", methods=["GET"])
 def get_request_company():
 
     query = '''
@@ -232,36 +232,36 @@ def get_request_company():
 
     return res
 
-@requests.route("/requests/<referrerId>", methods=["PUT"])
-def update_request_status(referrerId):
+# @requests.route("/requests/<referrerId>", methods=["PUT"])
+# def update_request_status(referrerId):
 
-    req = request.json
-    current_app.logger.info(req)
+#     req = request.json
+#     current_app.logger.info(req)
 
-    requestId = req.get("requestId", [])
-    status = req.get("status")
+#     requestId = req.get("requestId", [])
+#     status = req.get("status")
 
-    query = """
-        UPDATE Requests
-        SET status = %s
-        WHERE requestId IN (%s) AND referrerId = %s
-    """ % (', '.join(['%s'] * len(requestId)))
+#     query = """
+#         UPDATE Requests
+#         SET status = %s
+#         WHERE requestId IN (%s) AND referrerId = %s
+#     """ % (', '.join(['%s'] * len(requestId)))
 
-    current_app.logger.info(f'PUT /requests/<referrerId> query: {query}')
+#     current_app.logger.info(f'PUT /requests/<referrerId> query: {query}')
 
-    try:
-        cursor = db.get_db().cursor()
-        cursor.execute(query, (status, requestId, referrerId))
-        db.get_db().commit()
+#     try:
+#         cursor = db.get_db().cursor()
+#         cursor.execute(query, (status, requestId, referrerId))
+#         db.get_db().commit()
 
-        res = make_response(jsonify({"message": f"Updated successful"}))
-        res.status_code = 200
-    except Exception as e:
-        current_app.logger.error(f"Error updating referrer details: {str(e)}")
-        res = make_response(jsonify({"error": str(e)}))
-        res.status_code = 500
+#         res = make_response(jsonify({"message": f"Updated successful"}))
+#         res.status_code = 200
+#     except Exception as e:
+#         current_app.logger.error(f"Error updating referrer details: {str(e)}")
+#         res = make_response(jsonify({"error": str(e)}))
+#         res.status_code = 500
 
-    return res
+#     return res
 
 @requests.route("/requests/<studentId>", methods=["GET"])
 def get_student_requests(studentId):
