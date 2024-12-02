@@ -196,8 +196,6 @@ def create_request():
         WHERE requestId = {requestId}
     """
 
-    current_app.logger.info(f'PUT /requests/<referrerId> query: {query}')
-
     try:
         cursor = db.get_db().cursor()
         cursor.execute(query, (status, requestId))
@@ -212,8 +210,8 @@ def create_request():
 
     return res
 
-@requests.route("/requests/<referrerId>", methods=["GET"])
-def get_requests():
+@requests.route("/requests/<companyId>", methods=["GET"])
+def get_request_company():
 
     query = '''
         SELECT S.studentId, S.name AS studentName, S.contactInfo AS studentContact, R.company AS referredCompany, C.creationDate AS referralDate

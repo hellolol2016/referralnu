@@ -6,6 +6,8 @@ from backend.products.products_routes import products
 from backend.referrers.referrer_routes import referrers
 from backend.simple.simple_routes import simple_routes
 from backend.messages.message_routes import messages
+from backend.requests.requests_routes import requests
+from backend.connections.connections_routes import connections
 import os
 from dotenv import load_dotenv
 
@@ -46,6 +48,8 @@ def create_app():
     app.register_blueprint(products,    url_prefix='/p')
     app.register_blueprint(referrers,    url_prefix='/r')
     app.register_blueprint(messages,    url_prefix='/m')
+    #app.register_blueprint(requests,    url_prefix='/req')
+    app.register_blueprint(connections,    url_prefix='/con')
 
     # Don't forget to return the app object
     return app
