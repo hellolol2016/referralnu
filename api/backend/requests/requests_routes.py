@@ -182,7 +182,7 @@ def create_connections():
 
     return res
 
-@requests.route("/requests/<requestId>", methods=["PUT"])
+@requests.route("/requests/status/<requestId>", methods=["PUT"])
 def update_request_status():
 
     req = request.json
