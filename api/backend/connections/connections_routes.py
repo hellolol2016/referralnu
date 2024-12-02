@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, make_response, request, current_app
 from backend.db_connection import db
 
-connections = Blueprint('connections', __name__)
+connections = Blueprint('Connections', __name__)
 
 # Get all connections
 @connections.route("/", methods=["GET"])
@@ -10,14 +10,12 @@ def get_all_connections():
         SELECT connectionId,
                studentId,
                referrerId,
-               company,
-               status,
-               createdAt
-        FROM connections
-        ORDER BY createdAt
+               creationDate
+        FROM Connections
+        ORDER BY creationDate
     '''
 
-    current_app.logger.info(f'GET /connections query: {query}')
+    current_app.logger.info(f'GET / query: {query}')
 
     try:
         cursor = db.get_db().cursor()
