@@ -57,3 +57,25 @@ def create_connection():
     return res
 
 
+# Delete multiple connections
+@connections.route("/", methods=["DELETE"])
+def delete_connections():
+    try:
+        body = request.get_json()
+        connectionIds = body['connectionIds']
+
+        query = '''
+            DELETE FROM Connections
+            WHERE connectionId IN (%s)
+        ''' % ','.join(['%s'] * len(connectionIds))
+        current_app.logger.info(f'DELETE /connections query: {query}')
+
+        cursor = db.get_db().cursor()
+        cursor.execute(query, connectionIds)
+        db.get_db().commit()
+        res = make_response(jsonify({"message": f"Deleted {cursor.rowcount} connections successfully"}))
+        res.status_code = 200
+    except Exception as e:
+        res = make_response(jsonify({"error deleting connections": str(e)}))
+        res.status_code = 500
+    return res
