@@ -69,7 +69,7 @@ def create_request():
 
     return res
 
-@requests.route("/requests/<int:requestId>", methods=["DELETE"])
+@requests.route("/<requestId>", methods=["DELETE"])
 def delete_request(requestId):
     try:
         query = '''
