@@ -31,38 +31,8 @@ def get_students_by_advisor(advisorId):
         res.status_code = 500
     return res
 
-@students.route('/students/<advisorId>', methods = ['PUT'])
-def put_student_to_advisor(advisorId):
 
-    req = request.json
-    current_app.logger.info(req)
-
-    
-    studentId = req.get("studentId")
-
-    query = """
-        UPDATE Students
-        SET advisorId = {advisorId}
-        WHERE studentId = {studentId}
-    """
-
-    current_app.logger.info(f'PUT /students/<advisorId> query: {query}')
-
-    try:
-        cursor = db.get_db().cursor()
-        cursor.execute(query, (advisorId, studentId))
-        db.get_db().commit()
-
-        res = make_response(jsonify({"message": f"Updated successful"}))
-        res.status_code = 200
-    except Exception as e:
-        current_app.logger.error(f"Error updating student details: {str(e)}")
-        res = make_response(jsonify({"error": str(e)}))
-        res.status_code = 500
-
-    return res
-
-@students.route('/students/<int:advisorId>', methods=['POST'])
+@students.route('/students/<advisorId>', methods=['PUT'])
 def update_or_remove_advisor(advisorId):
     try:
         # Get the request data (newAdvisorId)
