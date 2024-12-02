@@ -28,7 +28,7 @@ def get_referrers():
 
     return res
 
-@referrers.route("/referrers", methods=["POST"])
+@referrers.route("/", methods=["POST"])
 def create_referrer():
 
     req = request.json
@@ -37,21 +37,21 @@ def create_referrer():
     name = req["name"]
     email = req["email"]
     #phone can be null
-    phone = req.get("phone", None)
+    phoneNumber = req.get("phoneNumber", "")
     adminId = req["adminId"]
     companyId = req["companyId"]
     #numreferrals can be null
-    numreferrals = req.get("numReferrals",None)
+    numreferrals = req.get("numReferrals")
 
     #not sure if query inserting None is ok 
     query = f'''
         INSERT INTO Referrers (name, 
                                email, 
-                               phone, 
+                               phoneNumber, 
                                adminId, 
                                companyId, 
                                numReferrals)
-        VALUES ('{name}', '{email}', '{phone}', {adminId}, {companyId}, {numreferrals})
+        VALUES (%s, %s, %s, %s, %s, %s)
     '''
 
     
@@ -59,7 +59,7 @@ def create_referrer():
     current_app.logger.info(query)
     try:
         cursor = db.get_db().cursor()
-        cursor.execute(query)
+        cursor.execute(query, (name, email, phoneNumber, adminId, companyId, numreferrals))  # Pass the values here
         db.get_db().commit()
         res = make_response(jsonify({"message": "Referrer created"}))
         res.status_code = 201
