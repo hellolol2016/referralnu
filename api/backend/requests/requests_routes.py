@@ -36,7 +36,7 @@ def get_requests():
 
     return res
 
-@requests.route("/requests", methods=["POST"])
+@requests.route("/info", methods=["POST"])
 def create_request():
 
     req = request.json
@@ -44,15 +44,14 @@ def create_request():
 
     # Extract and validate required fields
     studentId = req.get("studentId")
-
-    # Optional fields
-    description = req.get("description", "")
     # Default status is "Pending"?
-    status = req.get("status", "Pending")
+    pendingStatus = req.get("pendingStatus", "Pending")
 
+    companyId = req.get("companyId")
+    
     query = f"""
-        INSERT INTO Requests (studentId, adminId, description, status)
-        VALUES ({studentId}, '{description}', '{status}')
+        INSERT INTO Requests (studentId, pendingStatus, companyId)
+        VALUES ({studentId}, '{pendingStatus}', {companyId})
     """
 
     current_app.logger.info(query)
@@ -150,18 +149,18 @@ def get_referral_request_info():
 
     return res
 
-@requests.route("/requests/connections/<requestId>", methods=["POST"])
-def create_connections():
+@requests.route("/connections/<requestId>", methods=["POST"])
+def create_connections(requestId):
 
     req = request.json
     current_app.logger.info(req)
 
     studentId = req.get("studentId")
-    referralId = req.get("referralId")
+    referrerId = req.get("referrerId")
 
     query = f"""
-        INSERT INTO Connections (referralId, studentId)
-        VALUES ({referralId}, {studentId})
+        INSERT INTO Connections (referrerId, studentId)
+        VALUES ({referrerId}, {studentId})
     """
 
     current_app.logger.info(query)
