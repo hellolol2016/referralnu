@@ -78,7 +78,7 @@ CREATE TABLE Referrers
 -- Create Connections table
 CREATE TABLE Connections
 (
-    connectionId PRIMARY KEY AUTO_INCREMENT,
+    connectionId INT PRIMARY KEY AUTO_INCREMENT,
     referrerId   INT NOT NULL,
     creationDate TIMESTAMP,
     studentId    INT NOT NULL,
