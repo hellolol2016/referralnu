@@ -9,6 +9,7 @@ from backend.messages.message_routes import messages
 from backend.requests.requests_routes import requests
 from backend.connections.connections_routes import connections
 from backend.advisor.advisor_routes import advisor
+from backend.students.student_routes import students
 import os
 from dotenv import load_dotenv
 

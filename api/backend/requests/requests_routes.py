@@ -70,22 +70,19 @@ def create_request():
 
     return res
 
-@requests.route("/requests", methods=["DELETE"])
-def delete_requests():
+@requests.route("/requests/<int:requestId>", methods=["DELETE"])
+def delete_request(requestId):
     try:
-        body = request.get_json()
-        requestIds = body['requestIds']
-
         query = '''
             DELETE FROM Requests
-            WHERE requestId IN (%s)
-        ''' % ','.join(['%s'] * len(requestIds))
+            WHERE requestId = %s
+        '''
         current_app.logger.info(f'DELETE /requests query: {query}')
 
         cursor = db.get_db().cursor()
-        cursor.execute(query, requestIds)
+        cursor.execute(query, requestId)
         db.get_db().commit()
-        res = make_response(jsonify({"message": f"Deleted {cursor.rowcount} requests successfully"}))
+        res = make_response(jsonify({"message": "Request deleted successfully"}))
         res.status_code = 200
     except Exception as e:
         res = make_response(jsonify({"error deleting requests": str(e)}))
