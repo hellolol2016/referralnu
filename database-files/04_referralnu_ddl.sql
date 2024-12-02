@@ -121,7 +121,7 @@ CREATE TABLE Advisor_Messages
     content        TEXT NOT NULL,
     followUpDate   TIMESTAMP DEFAULT (DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 3 DAY)),
     reminderStatus ENUM('pending', 'sent', 'none') DEFAULT 'none',
-    messageId int AUTO_INCREMENT Primary Key
+    messageId      INT AUTO_INCREMENT Primary Key
     FOREIGN KEY (studentId) REFERENCES Students (studentId)
         ON UPDATE CASCADE
         ON DELETE CASCADE,
