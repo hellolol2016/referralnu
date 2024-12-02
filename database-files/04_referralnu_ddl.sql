@@ -204,7 +204,7 @@ VALUES
 ('Welcome to the program!', 1, 1, 1, 1, false),
 ('Your request has been accepted.', 2, 2, 2, 2, false),
 ('Unfortunately, your request has been rejected.', 1, 3, 1, 3,false),
-('GOSH DANG IT!', 1, 3, 1, 3,true);
+('GOSH DANG IT! SHIZZLES!!!!!', 1, 3, 1, 3,true);
 
 INSERT INTO Advisor_Messages (studentId, advisorId, sendDate, readDate, readStatus, content, followUpDate)
 VALUES

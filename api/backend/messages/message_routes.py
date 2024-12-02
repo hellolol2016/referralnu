@@ -106,19 +106,20 @@ def get_student_messages(studentId):
         res.status_code = 500
     return res
 
-@messages.route("/<keyword>", methods=["DELETE"])
+@messages.route("/keyword/<keyword>", methods=["DELETE"])
 def remove_bad_messages(keyword):
     query = f'''
         DELETE FROM Messages m
-        WHERE m.messageContent LIKE '%{keyword}%'
+        WHERE LOWER(messageContent) LIKE LOWER(%s)
     '''
     current_app.logger.info(f'DELETE /<keyword> query: {query}')
 
     try:
         cursor = db.get_db().cursor()
-        cursor.execute(query)
+        cursor.execute(query, (f'%{keyword}%'))
         db.get_db().commit()
-        res = make_response(jsonify({"message": ("Messages with %s deleted", keyword)}))
+        rows_deleted = cursor.rowcount
+        res = make_response(jsonify({"message": f"Removed all {rows_deleted} messages with keyword: {keyword}"}))
         res.status_code = 200
     except Exception as e:
         res = make_response(jsonify({"error fetching referrer messages": str(e)}))
