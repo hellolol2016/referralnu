@@ -4,7 +4,7 @@ from datetime import datetime
 
 students = Blueprint('Students', __name__)
 
-@students.route('/students/<advisorId>', methods = ['GET'])
+@students.route('/<advisorId>', methods = ['GET'])
 def get_students_by_advisor(advisorId):
 
     query = '''
@@ -32,7 +32,7 @@ def get_students_by_advisor(advisorId):
     return res
 
 
-@students.route('/students/<advisorId>', methods=['PUT'])
+@students.route('/<advisorId>', methods=['PUT'])
 def update_or_remove_advisor(advisorId):
     try:
         # Get the request data (newAdvisorId)
