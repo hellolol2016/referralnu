@@ -88,30 +88,33 @@ def delete_request(requestId):
         res.status_code = 500
     return res
 
-@requests.route("/requests/referrer/<referrerId>", methods=["GET"])
+@requests.route("/referrer/<referrerId>", methods=["GET"])
 def get_requests_by_referrer(referrerId):
 
     query = '''
-        SELECT C.studentId, 
-        S.name AS studentName, 
-        R.company AS referredCompany, 
+    SELECT 
+        C.studentId, 
+        S.firstName, 
+        S.lastName, 
+        R.companyId AS referredCompany, 
         C.creationDate AS referralDate, 
-        Req.status AS applicationStatus
-        FROM Connections C
-        JOIN Referrer R 
+        Req.pendingStatus AS applicationStatus
+    FROM Connections C
+    JOIN Referrers R 
         ON C.referrerId = R.referrerId
-        JOIN Students S 
+    JOIN Students S 
         ON C.studentId = S.studentId
-        JOIN Requests Req 
+    JOIN Requests Req 
         ON Req.studentId = S.studentId 
-        AND Req.referrerId = R.referrerId
+        AND Req.companyId = R.companyId
+    WHERE Req.requestId = %s;
     '''
 
-    current_app.logger.info(f'GET /requests/referrer/<referrerId> query: {query}')
+    current_app.logger.info(f'GET /referrer/<referrerId> query: {query}')
 
     try:
         cursor = db.get_db().cursor()
-        cursor.execute(query, (referrerId))
+        cursor.execute(query, (referrerId,))
         data = cursor.fetchall()
         res = make_response(jsonify(data))
         res.status_code = 200
