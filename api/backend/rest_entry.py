@@ -8,6 +8,7 @@ from backend.simple.simple_routes import simple_routes
 from backend.messages.message_routes import messages
 from backend.requests.requests_routes import requests
 from backend.connections.connections_routes import connections
+from backend.advisor.advisor_routes import advisor
 import os
 from dotenv import load_dotenv
 
@@ -50,6 +51,7 @@ def create_app():
     app.register_blueprint(messages,    url_prefix='/m')
     app.register_blueprint(requests,    url_prefix='/req')
     app.register_blueprint(connections,    url_prefix='/con')
+    app.register_blueprint(advisor,      url_prefix='/a')
 
     # Don't forget to return the app object
     return app
