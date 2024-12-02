@@ -4,7 +4,7 @@ from backend.db_connection import db
 advisor = Blueprint('advisor', __name__)
 
 # Get advisor info
-@advisor.route("/<advisorID>", methods=['GET'])
+@advisor.route("/advisor/<advisorID>", methods=['GET'])
 def get_advisor_information(advisorID):
     query = '''
         SELECT advisorId,
@@ -13,11 +13,11 @@ def get_advisor_information(advisorID):
                email,
                phoneNumber,
                college
-        FROM advisor
+        FROM Advisors
         WHERE advisorId = %s
     '''
 
-    current_app.logger.info(f'GET / advisor/<advisorId> query: {query}')
+    current_app.logger.info(f'GET /advisor/<advisorId> query: {query}')
 
     try:
         cursor = db.get_db().cursor()

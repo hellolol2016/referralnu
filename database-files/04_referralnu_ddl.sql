@@ -113,15 +113,15 @@ CREATE TABLE Requests
 
 CREATE TABLE Advisor_Messages
 (
-    studentId      INT,
-    advisorId      INT,
+    studentId      INT Not NULL,
+    advisorId      INT Not NULL,
     sendDate       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    readDate       TIMESTAMP NULL,
-    readStatus     VARCHAR(50),
-    content        TEXT,
+    readDate       TIMESTAMP DEFAULT NULL,
+    readStatus     ENUM('read', 'unread') DEFAULT 'unread',
+    content        TEXT NOT NULL,
     followUpDate   TIMESTAMP DEFAULT (DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 3 DAY)),
-    reminderStatus VARCHAR(50),
-    PRIMARY KEY (studentId, advisorId),
+    reminderStatus ENUM('pending', 'sent', 'none') DEFAULT 'none',
+    messageId int AUTO_INCREMENT Primary Key
     FOREIGN KEY (studentId) REFERENCES Students (studentId)
         ON UPDATE CASCADE
         ON DELETE CASCADE,
@@ -149,6 +149,8 @@ CREATE TABLE Messages
         ON UPDATE CASCADE
         ON DELETE CASCADE
 );
+
+CREATE INDEX idx_advisorId ON Students (advisorId);
 
 INSERT INTO Advisors (firstName, lastName, email, phoneNumber, college)
 VALUES
