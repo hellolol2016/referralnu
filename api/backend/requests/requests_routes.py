@@ -44,7 +44,6 @@ def create_request():
 
     # Extract and validate required fields
     studentId = req.get("studentId")
-    adminId = req.get("adminId")
 
     # Optional fields
     description = req.get("description", "")
@@ -53,7 +52,7 @@ def create_request():
 
     query = f"""
         INSERT INTO Requests (studentId, adminId, description, status)
-        VALUES ({studentId}, {adminId}, '{description}', '{status}')
+        VALUES ({studentId}, '{description}', '{status}')
     """
 
     current_app.logger.info(query)
@@ -129,7 +128,8 @@ def get_requests_by_referrer(referrerId):
 def get_referral_request_info():
 
     query = '''
-        SELECT Req.requestId, 
+        SELECT 
+        Req.requestId, 
         Com.name, 
         Req.pendingStatus, 
         Req.requestDate, 
@@ -153,7 +153,7 @@ def get_referral_request_info():
 
     return res
 
-@requests.route("/requests/<requestId>", methods=["POST"])
+@requests.route("/requests/connections/<requestId>", methods=["POST"])
 def create_connections():
 
     req = request.json
