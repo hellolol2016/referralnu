@@ -81,16 +81,16 @@ def get_results_by_student(studentId):
 
     query = '''
         SELECT s.StudentId, s.firstName, s.lastName, r.createdAt, r.pendingStatus
-        FROM Students s JOIN Advisor a ON s.advisorId = a.advisorId
+        FROM Students s JOIN Advisors a ON s.advisorId = a.advisorId
         JOIN Requests r ON s.StudentId = r.StudentId
-        WHERE studentId = {studentId}
+        WHERE s.studentId = %s
     '''
 
     current_app.logger.info(f'GET /students/<advisorId> query: {query}')
 
     try:
         cursor = db.get_db().cursor()
-        cursor.execute(query, (studentId))
+        cursor.execute(query, (studentId,))
         data = cursor.fetchall()
         res = make_response(jsonify(data))
         res.status_code = 200
@@ -110,7 +110,7 @@ def send_message(studentId):
     
     query = '''
         INSERT INTO Advisor_Messages (content, advisorId, studentId)
-        VALUES ('{content}', {advisorId}, {studentId})
+        VALUES (%s, %s, %s)
     '''
 
     current_app.logger.info(f'POST /students/<studentId> query: {query}')
@@ -136,7 +136,7 @@ def delete_student(studentId):
 
 
     query = '''
-        DELETE FROM Students WHERE studentId = {studentId};
+        DELETE FROM Students WHERE studentId = %s;
     '''
 
     current_app.logger.info(f'DELETE /students/<studentId> query: {query}')

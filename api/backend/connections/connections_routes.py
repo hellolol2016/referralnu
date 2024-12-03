@@ -36,17 +36,15 @@ def create_connection():
         body = request.get_json()
         studentId = body['studentId']
         referrerId = body['referrerId']
-        company = body.get('company', None)
-        status = body.get('status', 'Pending')
 
         query = '''
-            INSERT INTO connections (studentId, referrerId, company, status, createdAt)
-            VALUES (%s, %s, %s, %s, NOW())
+            INSERT INTO Connections (studentId, referrerId, creationDate)
+            VALUES (%s, %s, NOW())
         '''
 
         current_app.logger.info(f'POST /connections query: {query}')
         cursor = db.get_db().cursor()
-        cursor.execute(query, (studentId, referrerId, company, status))
+        cursor.execute(query, (studentId, referrerId,))
         res = make_response(jsonify({"message": "Connection created"}))
         res.status_code = 201
     except Exception as e:
@@ -66,7 +64,7 @@ def delete_connections():
             return make_response(jsonify({"error": "Missing connectionId"}), 400)
 
         query = '''
-            DELETE FROM connections
+            DELETE FROM Connections
             WHERE connectionId = %s
         '''
 

@@ -84,10 +84,10 @@ CREATE TABLE Connections
     studentId    INT NOT NULL,
     FOREIGN KEY (referrerId) REFERENCES Referrers (referrerId)
         ON UPDATE CASCADE
-        ON DELETE RESTRICT,
+        ON DELETE CASCADE,
     FOREIGN KEY (studentId) REFERENCES Students (studentId)
         ON UPDATE CASCADE
-        ON DELETE RESTRICT
+        ON DELETE CASCADE
 );
 
 
