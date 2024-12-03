@@ -98,7 +98,6 @@ CREATE TABLE Requests
     requestId   INT PRIMARY KEY AUTO_INCREMENT,
     studentId   INT NOT NULL,
     pendingStatus      VARCHAR(50),
-    requestDate TIMESTAMP, --this can be removed I think
     companyId  INT NOT NULL,
     createdAt   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     lastViewed  TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
