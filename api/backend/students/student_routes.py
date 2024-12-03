@@ -4,7 +4,7 @@ from datetime import datetime
 
 students = Blueprint('Students', __name__)
 
-@students.route('/<advisorId>', methods = ['GET'])
+@students.route('/advisors/<advisorId>', methods = ['GET'])
 def get_students_by_advisor(advisorId):
 
     query = '''
@@ -32,7 +32,7 @@ def get_students_by_advisor(advisorId):
     return res
 
 
-@students.route('/<advisorId>', methods=['PUT'])
+@students.route('/advisors/<advisorId>', methods=['PUT'])
 def update_or_remove_advisor(advisorId):
     try:
         # Get the request data (newAdvisorId)
@@ -80,9 +80,9 @@ def get_results_by_student(studentId):
 
 
     query = '''
-        SELECT s.StudentId, s.firstName, s.lastName, r.createdAt, r.pendingStatus
+        SELECT s.studentId, s.firstName, s.lastName, r.createdAt, r.pendingStatus
         FROM Students s JOIN Advisors a ON s.advisorId = a.advisorId
-        JOIN Requests r ON s.StudentId = r.StudentId
+        JOIN Requests r ON s.studentId = r.studentId
         WHERE s.studentId = %s
     '''
 
@@ -129,7 +129,7 @@ def send_message(studentId):
 
     return res
 
-@students.route('/students/<studentId>', methods = ['DELETE'])
+@students.route('/<studentId>', methods = ['DELETE'])
 def delete_student(studentId):
     req = request.json
     current_app.logger.info(req)
@@ -155,7 +155,7 @@ def delete_student(studentId):
 
     return res
 
-@students.route('/students/<studentId>/reminder', methods=['POST'])
+@students.route('/<studentId>/reminder', methods=['POST'])
 def send_reminder(studentId):
     try:
         # Get current date and time
