@@ -131,14 +131,14 @@ def remove_bad_messages(keyword):
 @messages.route("/referrer/<referrerId>", methods=["GET"])
 def get_referrer_messages(referrerId):
     query = f'''
-        SELECT m.id, 
+        SELECT m.messageId, 
                m.messageContent, 
                m.sentAt, 
-               m.senderId, 
-               m.receiverId, 
-               c.connectionId
+               m.referrerId, 
+               m.studentId, 
+               m.connectionId
         FROM Messages m
-        WHERE m.senderId = {referrerId}
+        WHERE m.referrerId = {referrerId}
         ORDER BY m.sentAt 
     '''
     current_app.logger.info(f'GET referrer/<referrerId> query: {query}')
