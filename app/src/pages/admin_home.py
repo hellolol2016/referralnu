@@ -9,22 +9,27 @@ st.set_page_config(layout = 'wide')
 # Show appropriate sidebar links for the role of the currently logged in user
 SideBarLinks()
 
-st.title(f"Welcome USAID Worker, {st.session_state['first_name']}.")
+st.title(f"Welcome Admin, {st.session_state['first_name']}.")
 st.write('')
 st.write('')
 st.write('### What would you like to do today?')
 
-if st.button('Predict Value Based on Regression Model', 
+if st.button('View All Requests', 
              type='primary',
              use_container_width=True):
-  st.switch_page('pages/11_Prediction.py')
+  st.switch_page('pages/admin/all_reqs.py')
 
-if st.button('View the Simple API Demo', 
+if st.button('Manage Connections / Conversations', 
              type='primary',
              use_container_width=True):
-  st.switch_page('pages/12_API_Test.py')
+  st.switch_page('pages/admin/all_cons.py')
 
-if st.button("View Classification Demo",
+if st.button('Contact Student', 
              type='primary',
              use_container_width=True):
-  st.switch_page('pages/13_Classification.py')
+  st.switch_page('pages/admin/student_messages.py')
+
+if st.button('Remove user', 
+             type='primary',
+             use_container_width=True):
+  st.switch_page('pages/admin/remove_student.py')
