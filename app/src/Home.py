@@ -81,7 +81,7 @@ if st.button('Act as Co-op Advisor',
     st.session_state['first_name'] = 'SysAdmin'
     st.switch_page('pages/31_Advisor_Home.py')
 
-if st.button('Act as Referrer Giver',
+if st.button('Act as Max Grahm, Referrer Giver',
             type = 'primary',
             use_container_width=True):
     st.session_state['authenticated'] = True
