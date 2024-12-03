@@ -74,7 +74,7 @@ if st.button('Act as Katherine Brown, co-op advisor',
     st.switch_page('pages/20_Advisor_Home.py')
 
 
-if st.button('Act as Referrer Giver',
+if st.button('Act as Max Grahm, Referrer Giver',
             type = 'primary',
             use_container_width=True):
     st.session_state['authenticated'] = True
