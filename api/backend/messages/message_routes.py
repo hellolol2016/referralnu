@@ -5,13 +5,13 @@ from backend.db_connection import db
 messages = Blueprint('messages', __name__)
 
 
-@messages.route("/<id>", methods=["DELETE"])
-def delete_message(id):
+@messages.route("/<messageId>", methods=["DELETE"])
+def delete_message(messageId):
     query = f'''
         DELETE FROM Messages
-        WHERE id = {id}
+        WHERE messageId = {messageId}
     '''
-    current_app.logger.info(f'DELETE message/<id> query: {query}')
+    current_app.logger.info(f'DELETE message/<messageId> query: {query}')
 
     try:
         cursor = db.get_db().cursor()
@@ -27,21 +27,23 @@ def delete_message(id):
 
 @messages.route("/conversation/<referrerId>/<studentId>", methods=["POST"])
 def add_message(referrerId, studentId):
-    messageContent = request.get("messageContent")
-    adminId = request.get("adminId", 1)
-    connectionId = request.get("connectionId")
-    studentSent = request.get("studentSent", False)
+    req = request.json
+    current_app.logger.info(req)
+
+    messageContent = req.get("messageContent")
+    adminId = req.get("adminId", 1)
+    connectionId = req.get("connectionId")
+    studentSent = req.get("studentSent", False)
     query = f'''
-        INSERT INTO Messages (messageContent, adminId, connectionId, referrerId, studentId,studentSent)
-        VALUES
-        ({messageContent}, {adminId}, {connectionId}, {referrerId}, {studentId}, {studentSent}),
+        INSERT INTO Messages (messageContent, adminId, connectionId, referrerId, studentId, studentSent)
+        VALUES (%s, %s, %s, %s, %s, %s)
     '''
 
-    current_app.logger.info(f'POST conversation/<connectionId> query: {query}')
+    current_app.logger.info(query)
 
     try:
         cursor = db.get_db().cursor()
-        cursor.execute(query,(referrerId, studentId))
+        cursor.execute(query, (messageContent, adminId, connectionId, referrerId, studentId, studentSent))
         db.get_db().commit()
         res = make_response(jsonify({"message": "Message added"}))
         res.status_code = 200
