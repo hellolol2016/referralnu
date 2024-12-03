@@ -75,7 +75,7 @@ def update_or_remove_advisor(advisorId):
 
 
 
-@students.route('/students/<studentId>', methods = ['GET'])
+@students.route('/<studentId>', methods = ['GET'])
 def get_results_by_student(studentId):
 
 
@@ -86,11 +86,11 @@ def get_results_by_student(studentId):
         WHERE s.studentId = %s
     '''
 
-    current_app.logger.info(f'GET /students/<advisorId> query: {query}')
+    current_app.logger.info(f'GET /<studentId> query: {query}')
 
     try:
         cursor = db.get_db().cursor()
-        cursor.execute(query, (studentId,))
+        cursor.execute(query, (studentId))
         data = cursor.fetchall()
         res = make_response(jsonify(data))
         res.status_code = 200
@@ -99,7 +99,7 @@ def get_results_by_student(studentId):
         res.status_code = 500
     return res
 
-@students.route('/students/<studentId>', methods = ['POST'])
+@students.route('/<studentId>', methods = ['POST'])
 def send_message(studentId):
     req = request.json
     current_app.logger.info(req)
