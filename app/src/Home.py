@@ -80,5 +80,5 @@ if st.button('Act as Referrer Giver',
     st.session_state['authenticated'] = True
     st.session_state['role'] = 'referrer'
     st.session_state['first_name'] = 'Max'
-    st.switch_page('pages/30_Referrer_Home.py')
+    st.switch_page('pages/Referrer_Home.py')
 
