@@ -209,3 +209,29 @@ def get_top_referrers():
         res.status_code = 500
 
     return res
+
+@referrers.route("/least", methods=["GET"])
+def get_least_referrers():
+    query = '''
+        SELECT r.referrerId, 
+               r.name, 
+               r.numReferrals, 
+               c.name as company_name
+        FROM Referrers r
+        JOIN Companies c ON r.companyId = c.companyId
+        ORDER BY r.numReferrals ASC
+        LIMIT 10
+    '''
+
+    try:
+        cursor = db.get_db().cursor()
+        cursor.execute(query)
+        data = cursor.fetchall()
+        res = make_response(jsonify(data))
+        res.status_code = 200
+    except Exception as e:
+        current_app.logger.error(f"Error fetching top referrers: {str(e)}")
+        res = make_response(jsonify({"error": str(e)}))
+        res.status_code = 500
+
+    return res

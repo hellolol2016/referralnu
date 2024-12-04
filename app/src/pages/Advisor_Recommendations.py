@@ -28,9 +28,7 @@ if st.button('Get top referrers', type='primary', use_container_width=True):
         data = response.json()
         if data:
             st.success("Results Fetched Successfully!")
-            st.json(data) 
-        else:
-            st.warning("No data found for the given Student ID.")
+            st.json(data)
     except requests.exceptions.RequestException as e:
             logger.error(f"Error fetching data for top referrers: {e}")
             st.error(f"Failed to fetch student results. Please try again later.")
@@ -62,4 +60,14 @@ if st.button('Get top referrers', type='primary', use_container_width=True):
 #      st.error(f"Failed to fetch student results. Please try again later.")
 
 if st.button('Referrers with the Most Referrals Left to Give', type='primary', use_container_width=True):
-     st.switch_page("pages/Advisor_Recommendations_Left.py")
+     try:
+        endpoint = f"{referrer_endpoint}/least"
+        logger.debug(endpoint)
+        response = requests.get(endpoint)
+        data = response.json()
+        if data:
+            st.success("Results Fetched Successfully!")
+            st.json(data) 
+     except requests.exceptions.RequestException as e:
+            logger.error(f"Error fetching data for top referrers: {e}")
+            st.error(f"Failed to fetch student results. Please try again later.")
