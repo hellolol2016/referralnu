@@ -125,61 +125,84 @@ def create_request(referrerId):
 
     return res
 
-@referrers.route("/best", methods = ["GET"])
+@referrers.route("/best", methods=["GET"])
 def get_best_referrers():
-    query = """SELECT r.referrerId
-        FROM Referrers r
-        JOIN Companies c ON r.companyId = c.companyId
-        WHERE c.name = (
-        SELECT c.name
-        FROM Requests req
-        JOIN Companies c ON req.companyId = c.companyId
-        WHERE req.pendingStatus = 'Accepted'
-        GROUP BY req.companyId
-        ORDER BY COUNT(req.requestId) DESC
-        LIMIT 1
-        );
+    # Get the top_n parameter from the query string, default to 10 if not provided
+    top_n = request.args.get("top_n", default=10, type=int)
+
+    # Ensure that top_n is a positive integer
+    if top_n <= 0:
+        return make_response(jsonify({"error": "top_n must be a positive integer"}), 400)
+
+    query = """
+        SELECT ref.referrerId, 
+       ref.name, 
+       ref.email, 
+       ref.phoneNumber,
+       c.name AS companyName
+    FROM Referrers ref 
+    JOIN Companies c ON ref.companyId = c.companyId
+    JOIN (
+    SELECT r.companyId
+    FROM Requests r
+    WHERE r.pendingStatus = 'accepted'
+    GROUP BY r.companyId
+    ORDER BY COUNT(*) DESC
+    LIMIT %s  
+    ) AS TopCompanies ON ref.companyId = TopCompanies.companyId;
+
+
     """
 
-    current_app.logger.info(f'Get /best query: {query}')
+    current_app.logger.info(f'Get /best query: {query} with top_n: {top_n}')
 
     try:
         cursor = db.get_db().cursor()
-        cursor.execute(query, ())
+        cursor.execute(query, (top_n,))  # Pass top_n as parameter
         data = cursor.fetchall()
+
+    
         res = make_response(jsonify(data))
         res.status_code = 200
+
     except Exception as e:
+        current_app.logger.error(f"Error in /best: {str(e)}")
         res = make_response(jsonify({"error": str(e)}))
         res.status_code = 500
 
     return res
 
-@referrers.route("/left", methods = ["GET"])
+
+
+@referrers.route("/left", methods=["GET"])
 def get_best_referrers_left():
-    query = """
-    SELECT r.referrerId
-    FROM Referrer r
-    JOIN Company c ON r.companyId = c.companyId
-    WHERE c.companyName = (
-    SELECT c.companyName
-    FROM Company c
-    JOIN Referrer r ON c.companyId = r.companyId
-    GROUP BY c.companyName
-    ORDER BY SUM(r.numReferrals) DESC
-    LIMIT 1
-    );
+    # Default to 5 if 'top_n' is not provided
+    top_n = request.args.get("top_n", default=5, type=int)
+
+    # Ensure 'top_n' is a positive integer
+    if top_n <= 0:
+        return make_response(jsonify({"error": "top_n must be a positive integer"}), 400)
+
+    query = f"""
+    SELECT referrerId, name, email, phoneNumber, numReferrals
+    FROM Referrers
+    ORDER BY numReferrals DESC
+    LIMIT %s;
     """
 
-    current_app.logger.info(f'Get /left query: {query}')
+    current_app.logger.info(f'Get /left query: {query} with top_n: {top_n}')
 
     try:
         cursor = db.get_db().cursor()
-        cursor.execute(query, ())
+        cursor.execute(query, (top_n,))  # Execute with top_n parameter
         data = cursor.fetchall()
+
+
         res = make_response(jsonify(data))
         res.status_code = 200
+    
     except Exception as e:
+        current_app.logger.error(f"Error in /left: {str(e)}")
         res = make_response(jsonify({"error": str(e)}))
         res.status_code = 500
 
