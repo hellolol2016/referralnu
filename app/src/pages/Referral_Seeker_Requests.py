@@ -4,6 +4,7 @@ logger = logging.getLogger(__name__)
 import streamlit as st
 from modules.nav import SideBarLinks
 import requests
+import pandas as pd
 
 # Base URL for the API
 API_BASE_URL = "http://web-api:4000/requests"
@@ -32,8 +33,15 @@ if menu == "View Requests":
                 if response.status_code == 200:
                     data = response.json()
                     if data:
-                        st.write(f"**Found {len(data)} requests with status '{status}'**")
-                        st.json(data)
+                        st.write(f"**Found {len(data)} requests with status '{status}':**")
+
+                        df = pd.DataFrame(data)
+
+                        # Clean up column names (if needed)
+                        df.columns = [col.replace('_', ' ').title() for col in df.columns]
+
+                        # Display the data in a table format
+                        st.dataframe(df, use_container_width=True)
                     else:
                         st.warning(f"No requests found with status '{status}'.")
                 else:
