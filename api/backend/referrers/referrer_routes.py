@@ -43,7 +43,6 @@ def create_referrer():
     #numreferrals can be null
     numreferrals = req.get("numReferrals")
 
-    #not sure if query inserting None is ok 
     query = f'''
         INSERT INTO Referrers (name, 
                                email, 
@@ -180,6 +179,32 @@ def get_best_referrers_left():
         res = make_response(jsonify(data))
         res.status_code = 200
     except Exception as e:
+        res = make_response(jsonify({"error": str(e)}))
+        res.status_code = 500
+
+    return res
+
+@referrers.route("/top", methods=["GET"])
+def get_top_referrers():
+    query = '''
+        SELECT r.referrerId, 
+               r.name, 
+               r.numReferrals, 
+               c.name as company_name
+        FROM Referrers r
+        JOIN Companies c ON r.companyId = c.companyId
+        ORDER BY r.numReferrals DESC
+        LIMIT 10
+    '''
+
+    try:
+        cursor = db.get_db().cursor()
+        cursor.execute(query)
+        data = cursor.fetchall()
+        res = make_response(jsonify(data))
+        res.status_code = 200
+    except Exception as e:
+        current_app.logger.error(f"Error fetching top referrers: {str(e)}")
         res = make_response(jsonify({"error": str(e)}))
         res.status_code = 500
 
