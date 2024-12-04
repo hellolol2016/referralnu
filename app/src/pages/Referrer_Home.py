@@ -15,7 +15,7 @@ st.write('')
 st.write('### What would you like to do?')
 
 # 4.1
-if st.button('See Resume Information',
+if st.button('See Student Information',
              type='primary',
              use_container_width=True):
   st.switch_page('pages/referrer_all_resumes.py')
