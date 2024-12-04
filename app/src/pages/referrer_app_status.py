@@ -1,33 +1,46 @@
 # 4.3
 
-from flask import Blueprint, jsonify, make_response, request, current_app
-from backend.db_connection import db
+import logging
+import streamlit as st
+import requests
 
-requests = Blueprint('Requests', __name__)
+# Backend API URL for updating status
+UPDATE_STATUS_URL = "http://web-api:4000/status"
 
-@requests.route("/status/<int:requestId>", methods=["PUT"])
-def update_request_status(requestId):
-    req = request.json
-    current_app.logger.info(req)
+# Setup logging
+logger = logging.getLogger(__name__)
 
-    pendingStatus = req.get("pendingStatus", "pending")
+# Page Title
+st.title("Change Application Status")
 
-    query = """
-        UPDATE Requests
-        SET pendingStatus = %s
-        WHERE requestId = %s
-    """
-
+# Function to update request status
+def update_request_status(request_id, pending_status):
     try:
-        cursor = db.get_db().cursor()
-        cursor.execute(query, (pendingStatus, requestId))
-        db.get_db().commit()
+        # API call to update the request status
+        payload = {"pendingStatus": pending_status}
+        url = f"{UPDATE_STATUS_URL}/{request_id}"  # Append requestId to the URL
+        response = requests.put(url, json=payload)
 
-        res = make_response(jsonify({"message": f"Request status updated to '{pendingStatus}' successfully"}))
-        res.status_code = 200
+        if response.status_code == 200:
+            st.success(f"Request ID {request_id} status updated to '{pending_status}' successfully!")
+        else:
+            st.error(f"Failed to update request status: {response.status_code}")
+            st.write(response.text)
     except Exception as e:
-        current_app.logger.error(f"Error updating request status: {str(e)}")
-        res = make_response(jsonify({"error": str(e)}))
-        res.status_code = 500
+        st.error(f"Error: {str(e)}")
 
-    return res
+# Input for Request ID and Pending Status
+request_id = st.text_input("Enter Request ID", help="Enter the unique ID of the request")
+pending_status = st.selectbox(
+    "Select New Status",
+    options=["Pending", "Approved", "Rejected"],
+    index=0,
+    help="Select the new pending status for the request"
+)
+
+# Button to update status
+if st.button("Update Status"):
+    if request_id and pending_status:
+        update_request_status(request_id, pending_status.lower())
+    else:
+        st.warning("Please provide both Request ID and a valid status.")
