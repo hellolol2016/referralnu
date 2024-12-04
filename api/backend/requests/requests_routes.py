@@ -8,21 +8,8 @@ requests = Blueprint('Requests', __name__)
 def get_requests():
 
     query = '''
-        SELECT Req.requestId, 
-        Req.pendingStatus, 
-        Req.requestDate, 
-        Req.createdAt, 
-        Req.lastViewed, 
-        Com.name, 
-        Mes.messageContent, 
-        Mes.sentAt
-        FROM Requests Req
-        LEFT JOIN Messages Mes 
-        ON Req.studentId = Mes.studentId 
-        AND Req.requestId = Mes.connectionId
-        JOIN Companies Com 
-        ON Req.companyId = Com.companyId
-        ORDER BY Req.requestDate DESC;
+        SELECT * 
+        FROM Requests;
     '''
 
     try:
