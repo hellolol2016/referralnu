@@ -10,6 +10,7 @@ from backend.requests.requests_routes import requests
 from backend.connections.connections_routes import connections
 from backend.advisor.advisor_routes import advisor
 from backend.students.student_routes import students
+from backend.companies.company_routes import companies
 import os
 from dotenv import load_dotenv
 
@@ -54,6 +55,7 @@ def create_app():
     app.register_blueprint(connections,    url_prefix='/connections')
     app.register_blueprint(advisor,      url_prefix='/advisors')
     app.register_blueprint(students, url_prefix='/students')
+    app.register_blueprint(companies, url_prefix='/companies')
 
     # Don't forget to return the app object
     return app
