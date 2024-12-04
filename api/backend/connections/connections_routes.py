@@ -79,14 +79,14 @@ def create_connection():
 
 
 # Delete connections
-@connections.route("/", methods=["DELETE"])
-def delete_connections():
+@connections.route("/<connectionId>", methods=["DELETE"])
+def delete_connections(connectionId):
     try:
-        body = request.get_json()
-        connectionId = body.get('connectionId')
+        #body = request.get_json()
+        #connectionId = body.get('connectionId')
 
-        if not connectionId:
-            return make_response(jsonify({"error": "Missing connectionId"}), 400)
+        #if not connectionId:
+            #return make_response(jsonify({"error": "Missing connectionId"}), 400)
 
         query = '''
             DELETE FROM Connections

@@ -74,6 +74,28 @@ def update_or_remove_advisor(advisorId):
         return make_response(jsonify({"error": str(e)}), 500)
 
 
+@students.route('/<studentId>', methods = ['GET'])
+def get_student_by_id(studentId):
+
+
+    query = '''
+        SELECT s.studentId, s.firstName, s.lastName 
+        FROM Students s 
+        WHERE s.studentId = %s
+    '''
+
+    current_app.logger.info(f'GET /<studentId> query: {query}')
+
+    try:
+        cursor = db.get_db().cursor()
+        cursor.execute(query, (studentId))
+        data = cursor.fetchall()
+        res = make_response(jsonify(data))
+        res.status_code = 200
+    except Exception as e:
+        res = make_response(jsonify({"error fetching student": str(e)}))
+        res.status_code = 500
+    return res
 
 @students.route('/<studentId>/results', methods = ['GET'])
 def get_results_by_student(studentId):

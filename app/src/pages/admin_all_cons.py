@@ -23,28 +23,56 @@ except Exception as e:
 for connection in connections:
     try:
         referrer_response = requests.get(f"{referrer_endpoint}/{connection['referrerId']}")
-        referrer_name = referrer_response.json().get("name", "Unknown Referrer")
+        referrer_response.raise_for_status()
+        referrer_data = referrer_response.json()
+        if isinstance(referrer_data, list) and len(referrer_data) > 0:
+            referrer_name = referrer_data[0].get("name", "Unknown Referrer")
+        elif isinstance(referrer_data, dict):
+            referrer_name = referrer_data.get("name", "Unknown Referrer")
+        #st.write(type(referrer_data))  # Debug: Print the response to see its structure
+        #st.write(referrer_data[0].get("name"))  # Debug: Print the response to see its structure
+        referrer_name = referrer_data[0].get("name", "Unknown Referrer") 
     except Exception as e:
         st.write(e)
         referrer_name = "Unknown Referrer"
 
     try:
         student_response = requests.get(f"{student_endpoint}/{connection['studentId']}")
-        student_name = student_response.json().get("name", "Unknown Student")
+        student_data = student_response.json()
+        #st.write(type(student_data))  # Debug: Print the response to see its structure
+        student_name = student_data[0].get("firstName") + " " + student_data[0].get("lastName")
     except Exception as e:
         student_name = "Unknown Student"
 
     connection["referrerName"] = referrer_name
     connection["studentName"] = student_name
 
-# Display the connections in a table
+# Create a search bar
+search_query = st.text_input("Search connections by referrer name, student name, or connection ID")
+
+# Filter connections based on the search query
 if connections:
-    st.subheader("Connections")
+    filtered_connections = []
     for connection in connections:
+        if (search_query.lower() in connection["referrerName"].lower() or
+            search_query.lower() in connection["studentName"].lower() or
+            search_query.lower() in str(connection["connectionId"]).lower()):
+            filtered_connections.append(connection)
+
+# Display the filtered connections in a table
+if filtered_connections:
+    st.subheader("Connections")
+    for connection in filtered_connections:
         with st.container():
             st.markdown(f"**Connection ID:** {connection['connectionId']}")
             st.markdown(f"**Referrer Name:** {connection['referrerName']}")
             st.markdown(f"**Student Name:** {connection['studentName']}")
+            if st.button(f"View Messages for Connection {connection['connectionId']}", key=connection['connectionId']):
+                st.query_params(referrerId=connection['referrerId'], studentId=connection['studentId'])
+                st.rerun()
+            if st.button("Delete Connection", key=("delete", connection['connectionId'])):
+                requests.delete(f"{connections_endpoint}/{connection['connectionId']}")
+                st.rerun()
             st.markdown("---")
 else:
     st.write("No connections found.")
