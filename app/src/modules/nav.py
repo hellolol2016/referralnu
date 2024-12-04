@@ -61,6 +61,10 @@ def AdminPageNav():
 
 def AdvisorPageNav():
     st.sidebar.page_link("pages/31_Advisor_Home.py", label = "Advisor")
+    st.sidebar.page_link("pages/Advisor_Recommendations.py", label = "Recommendations")
+    st.sidebar.page_link("pages/Advisor_Referral_Progress.py", label = "Progress")
+    st.sidebar.page_link("pages/Advisor_Results.py", label = "Results")
+    st.sidebar.page_link("pages/Advisor_Student_Info.py", label = "Student Info")
 
 
 def ReferralSeekerPageNav():
