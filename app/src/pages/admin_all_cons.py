@@ -68,8 +68,11 @@ if filtered_connections:
             st.markdown(f"**Referrer Name:** {connection['referrerName']}")
             st.markdown(f"**Student Name:** {connection['studentName']}")
             if st.button(f"View Messages for Connection {connection['connectionId']}", key=connection['connectionId']):
-                st.query_params(referrerId=connection['referrerId'], studentId=connection['studentId'])
-                st.rerun()
+                st.session_state["message_connectionId"]= connection['connectionId']
+                st.session_state["message_studentName"] = connection['studentName']
+                st.session_state["message_referrerName"] = connection['referrerName']
+                #st.query_params["connectionId"] = connection['connectionId']
+                st.switch_page("pages/conversation.py")
             if st.button("Delete Connection", key=("delete", connection['connectionId'])):
                 requests.delete(f"{connections_endpoint}/{connection['connectionId']}")
                 st.rerun()

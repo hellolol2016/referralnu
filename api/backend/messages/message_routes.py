@@ -52,19 +52,17 @@ def add_message(referrerId, studentId):
         res.status_code = 500
     return res
 
-@messages.route("/conversation/<referrerId>/<studentId>", methods=["GET"])
-def get_conversation(referrerId, studentId):
+@messages.route("/conversation/<connectionId>", methods=["GET"])
+def get_conversation(connectionId):
     query = '''
       SELECT m.messageId, 
               m.messageContent, 
               m.sentAt, 
               m.studentId, 
               m.referrerId, 
-              c.referrerId,
-              c.studentId
+              m.studentSent
       FROM Messages m
-      JOIN Connections c ON m.referrerId = c.referrerId AND m.studentId = c.studentId
-      WHERE c.referrerId = %s AND c.studentId = %s
+      WHERE m.connectionId = %s
       ORDER BY m.sentAt 
     '''
 
@@ -72,7 +70,7 @@ def get_conversation(referrerId, studentId):
 
     try:
         cursor = db.get_db().cursor()
-        cursor.execute(query,(referrerId, studentId))
+        cursor.execute(query,(connectionId))
         data = cursor.fetchall()
         res = make_response(jsonify(data))
         res.status_code = 200
