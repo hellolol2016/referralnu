@@ -18,34 +18,34 @@ st.write('### What would you like to do?')
 if st.button('See Resume Information',
              type='primary',
              use_container_width=True):
-  st.switch_page('pages/referrer/all_resumes.py')
+  st.switch_page('pages/referrer_all_resumes.py')
 
 # 4.2
 if st.button('Remove Companies',
              type='primary',
              use_container_width=True):
-  st.switch_page('pages/referrer/remove_company.py')
+  st.switch_page('pages/referrer_remove_company.py')
 
 # 4.3
 if st.button("Change Application Status",
              type='primary',
              use_container_width=True):
-  st.switch_page('pages/referrer/app_status.py')
+  st.switch_page('pages/referrer_app_status.py')
 
 # 4.4
 if st.button("Communicate Requirements",
              type='primary',
              use_container_width=True):
-  st.switch_page('pages/referrer/cons.py')
+  st.switch_page('pages/referrer_cons.py')
 
 # 4.5
 if st.button("Student Referral Status",
              type='primary',
              use_container_width=True):
-  st.switch_page('pages/referrer/student_status.py')
+  st.switch_page('pages/referrer_student_status.py')
 
 # 4.6
 if st.button("Edit Contact Information",
              type='primary',
              use_container_width=True):
-  st.switch_page('pages/referrer/info.py')
+  st.switch_page('pages/referrer_info.py')
