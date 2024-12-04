@@ -132,14 +132,13 @@ def get_referral_request_info(requestId):
         Req.requestId, 
         Com.name, 
         Req.pendingStatus, 
-        Req.requestDate, 
         Req.createdAt, 
         Req.lastViewed 
         FROM Requests Req
         JOIN Companies Com 
         ON Req.companyId = Com.companyId
         WHERE Req.requestId = %s
-        ORDER BY Req.requestDate DESC; 
+        ORDER BY Req.createdAt DESC; 
     '''
 
     try:
@@ -302,7 +301,7 @@ def get_requests_by_status(status):
             r.studentId, 
             r.companyId, 
             r.pendingStatus, 
-            r.requestDate, 
+            r.createdAt, 
             s.firstName, 
             s.lastName,
             ref.name AS referrerName
