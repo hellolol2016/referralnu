@@ -34,3 +34,5 @@ def get_student_requests(studentId):
         res.status_code = 500
 
     return res
+
+# requests.get(http://web-api:4000/students/1)
