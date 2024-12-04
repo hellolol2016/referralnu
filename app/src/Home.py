@@ -65,14 +65,21 @@ if st.button('Act as Julia Baker, an Referral Seeker',
     st.session_state['first_name'] = 'Julia'
     st.switch_page('pages/Referral_Seeker.py')
 
-if st.button('Act as Katherine Brown, co-op advisor', 
+if st.button('Act as System Administrator', 
+            type = 'primary', 
+            use_container_width=True):
+    st.session_state['authenticated'] = True
+    st.session_state['role'] = 'administrator'
+    st.session_state['first_name'] = 'SysAdmin'
+    st.switch_page('pages/20_Admin_Home.py')
+
+if st.button('Act as Co-op Advisor', 
             type = 'primary', 
             use_container_width=True):
     st.session_state['authenticated'] = True
     st.session_state['role'] = 'advisor'
-    st.session_state['first_name'] = 'Katherine'
-    st.switch_page('pages/20_Advisor_Home.py')
-
+    st.session_state['first_name'] = 'SysAdmin'
+    st.switch_page('pages/31_Advisor_Home.py')
 
 if st.button('Act as Max Grahm, Referrer Giver',
             type = 'primary',

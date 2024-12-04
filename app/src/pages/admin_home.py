@@ -17,19 +17,19 @@ st.write('### What would you like to do today?')
 if st.button('View All Requests', 
              type='primary',
              use_container_width=True):
-  st.switch_page('pages/admin/all_reqs.py')
+  st.switch_page('pages/admin_all_reqs.py')
 
 if st.button('Manage Connections / Conversations', 
              type='primary',
              use_container_width=True):
-  st.switch_page('pages/admin/all_cons.py')
+  st.switch_page('pages/admin_all_cons.py')
 
 if st.button('Contact Student', 
              type='primary',
              use_container_width=True):
-  st.switch_page('pages/admin/student_messages.py')
+  st.switch_page('pages/admin_student_messages.py')
 
 if st.button('Remove user', 
              type='primary',
              use_container_width=True):
-  st.switch_page('pages/admin/remove_student.py')
+  st.switch_page('pages/admin_remove_student.py')
