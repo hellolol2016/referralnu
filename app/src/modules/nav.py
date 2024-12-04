@@ -61,16 +61,17 @@ def AdminPageNav():
 
 def AdvisorPageNav():
     st.sidebar.page_link("pages/31_Advisor_Home.py", label = "Advisor")
-    st.sidebar.page_link()
+
 
 def ReferralSeekerPageNav():
     st.sidebar.page_link("pages/Referral_Seeker.py", label = "Referral Seeker")
-    st.sidebar.page_link("pages/Referral_seeker_Requests.py", label = "Requests")
+    st.sidebar.page_link("pages/Referral_Seeker_Requests.py", label = "Requests")
     st.sidebar.page_link("pages/Referral_Seeker_Search_Connections.py", label = "Connections")
 
 def ReferrerPageNav():
     st.sidebar.page_link("pages/Referrer_Home.py", label = "Referrer")
-    st.sidebar.page_link("pages")
+    st.sidebar.page_link("pages/referrer_remove_company.py", label = "Change Employment")
+    st.sidebar.page_link("pages/referrer_all_resumes.py", label = "Resumes")
 
 
 # --------------------------------Links Function -----------------------------------------------
@@ -109,6 +110,15 @@ def SideBarLinks(show_home=False):
         # If the user is an administrator, give them access to the administrator pages
         if st.session_state["role"] == "administrator":
             AdminPageNav()
+        
+        if st.session_state["role"] == "advisor":
+            AdvisorPageNav()
+
+        if st.session_state["role"] == "referrer":
+            ReferrerPageNav()
+        
+        if st.session_state["role"] == "Referral Seeker":
+            ReferralSeekerPageNav()
 
     # Always show the About page at the bottom of the list of links
     AboutPageNav()
