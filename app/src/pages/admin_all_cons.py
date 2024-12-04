@@ -1,5 +1,8 @@
 import streamlit as st
 import requests
+# Back button
+if st.button("← Back to Admin Home"):
+    st.switch_page("pages/admin_home.py")
 
 st.title("All Connections")
 

@@ -1,5 +1,8 @@
 import streamlit as st
 import requests
+# Back button
+if st.button("← Back to Connections"):
+    st.switch_page("pages/admin_all_cons.py")
 connectionId = st.session_state["message_connectionId"]
 referrerName = st.session_state["message_referrerName"]
 studentName = st.session_state["message_studentName"]
@@ -27,11 +30,11 @@ if messages:
     for message in messages:
         with st.container():
           if message.get('studentSent', False):
-            st.markdown(f"**From:** {studentName}")
+            st.markdown(f"**{studentName}** - {message.get('sentAt', 'Unknown time')}")
           else:
             st.markdown(f"**From:** {referrerName}")
-          st.markdown(f"**Message:** {message.get('messageContent', 'No content')}")
-          st.markdown(f"**Sent At:** {message.get('sentAt', 'Unknown time')}")
+          st.markdown(f"{message.get('messageContent', 'No content')}")
+          #st.markdown(f"**Sent At:** {message.get('sentAt', 'Unknown time')}")
           st.markdown("---")
 else:
     st.write("No messages found for this conversation")
