@@ -4,7 +4,7 @@ logger = logging.getLogger(__name__)
 import streamlit as st
 from modules.nav import SideBarLinks
 import requests
-
+import pandas as pd
 st.set_page_config(layout = 'wide')
 
 # Show appropriate sidebar links for the role of the currently logged in user
@@ -28,7 +28,9 @@ if st.button('Get Student information', type='primary', use_container_width=True
             data = response.json()
             if data:
                 st.success("Student Results Fetched Successfully!")
-                st.json(data) 
+                df = pd.DataFrame(data)
+                st.subheader("Student Information:")
+                st.table(df)
             else:
                 st.warning("No data found for the given Student ID.")
     except requests.exceptions.RequestException as e:

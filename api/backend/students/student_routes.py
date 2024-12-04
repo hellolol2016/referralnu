@@ -79,7 +79,7 @@ def get_student_by_id(studentId):
 
 
     query = '''
-        SELECT s.studentId, s.firstName, s.lastName 
+        SELECT s.email, s.studentId, s.firstName, s.lastName, s.advisorId
         FROM Students s 
         WHERE s.studentId = %s
     '''
