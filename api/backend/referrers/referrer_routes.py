@@ -124,3 +124,63 @@ def create_request(referrerId):
         res.status_code = 500
 
     return res
+
+@referrers.route("/best", methods = ["GET"])
+def get_best_referrers():
+    query = """SELECT r.referrerId
+        FROM Referrers r
+        JOIN Companies c ON r.companyId = c.companyId
+        WHERE c.name = (
+        SELECT c.name
+        FROM Requests req
+        JOIN Companies c ON req.companyId = c.companyId
+        WHERE req.pendingStatus = 'Accepted'
+        GROUP BY req.companyId
+        ORDER BY COUNT(req.requestId) DESC
+        LIMIT 1
+        );
+    """
+
+    current_app.logger.info(f'Get /best query: {query}')
+
+    try:
+        cursor = db.get_db().cursor()
+        cursor.execute(query, ())
+        data = cursor.fetchall()
+        res = make_response(jsonify(data))
+        res.status_code = 200
+    except Exception as e:
+        res = make_response(jsonify({"error": str(e)}))
+        res.status_code = 500
+
+    return res
+
+@referrers.route("/left", methods = ["GET"])
+def get_best_referrers_left():
+    query = """
+    SELECT r.referrerId
+    FROM Referrer r
+    JOIN Company c ON r.companyId = c.companyId
+    WHERE c.companyName = (
+    SELECT c.companyName
+    FROM Company c
+    JOIN Referrer r ON c.companyId = r.companyId
+    GROUP BY c.companyName
+    ORDER BY SUM(r.numReferrals) DESC
+    LIMIT 1
+    );
+    """
+
+    current_app.logger.info(f'Get /left query: {query}')
+
+    try:
+        cursor = db.get_db().cursor()
+        cursor.execute(query, ())
+        data = cursor.fetchall()
+        res = make_response(jsonify(data))
+        res.status_code = 200
+    except Exception as e:
+        res = make_response(jsonify({"error": str(e)}))
+        res.status_code = 500
+
+    return res
