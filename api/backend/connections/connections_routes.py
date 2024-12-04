@@ -28,6 +28,31 @@ def get_all_connections():
         res.status_code = 500
     return res
 
+@connections.route("/<studentId>", methods=["GET"])
+def get_connections_by_studentId(studentId):
+
+    query = '''
+    SELECT connectionId,
+           studentId,
+           referrerId,
+           creationDate
+    FROM Connections
+    WHERE studentId = %s
+    ORDER BY creationDate;
+    '''
+
+    current_app.logger.info(f'GET /<studentId> query: {query}')
+
+    try:
+        cursor = db.get_db().cursor()
+        cursor.execute(query, (studentId,))
+        data = cursor.fetchall()
+        res = make_response(jsonify(data))
+        res.status_code = 200
+    except Exception as e:
+        res = make_response(jsonify({"error fetching requests by referrer": str(e)}))
+        res.status_code = 500
+    return res
 
 # Create a new connection
 @connections.route("/", methods=["POST"])
