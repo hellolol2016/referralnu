@@ -11,7 +11,7 @@ SideBarLinks()
 
 st.title('Advisor Homepage')
 
-student_endpoint = "http://localhost:4000/students"
+student_endpoint = "http://web-api:4000/students"
 
 student_id = st.text_input("Enter Student ID to fetch results:")
 
