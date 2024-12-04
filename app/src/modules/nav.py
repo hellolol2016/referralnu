@@ -50,10 +50,27 @@ def ClassificationNav():
 
 #### ------------------------ System Admin Role ------------------------
 def AdminPageNav():
-    st.sidebar.page_link("pages/20_Admin_Home.py", label="System Admin", icon="🖥️")
+    st.sidebar.page_link("pages/admin_home.py", label="System Admin", icon="🖥️")
     st.sidebar.page_link(
         "pages/21_ML_Model_Mgmt.py", label="ML Model Management", icon="🏢"
     )
+    st.sidebar.page_link("pages/admin_all_cons.py", label = "All Connections")
+    st.sidebar.page_link("pages/admin_all_reqs.py", label = "All Requests")
+    st.sidebar.page_link("pages/admin_manage_connections.py", label = "Manage Connections")
+    st.sidebar.page_link("pages/admin_student_messages", label = "Student Messages")
+
+def AdvisorPageNav():
+    st.sidebar.page_link("pages/31_Advisor_Home.py", label = "Advisor")
+    st.sidebar.page_link()
+
+def ReferralSeekerPageNav():
+    st.sidebar.page_link("pages/Referral_Seeker.py", label = "Referral Seeker")
+    st.sidebar.page_link("pages/Referral_seeker_Requests.py", label = "Requests")
+    st.sidebar.page_link("pages/Referral_Seeker_Search_Connections.py", label = "Connections")
+
+def ReferrerPageNav():
+    st.sidebar.page_link("pages/Referrer_Home.py", label = "Referrer")
+    st.sidebar.page_link("pages")
 
 
 # --------------------------------Links Function -----------------------------------------------
