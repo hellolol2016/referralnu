@@ -324,3 +324,32 @@ def get_requests_by_status(status):
         res.status_code = 500
 
     return res
+
+@requests.route("/referrer/<int:referrerId>", methods=["PUT"])
+def update_referrer_info(referrerId):
+    req = request.json
+    current_app.logger.info(req)
+
+    name = req.get("name")
+    email = req.get("email")
+    phoneNumber = req.get("phoneNumber")
+
+    query = """
+        UPDATE Referrers
+        SET name = %s, email = %s, phoneNumber = %s
+        WHERE referrerId = %s
+    """
+
+    try:
+        cursor = db.get_db().cursor()
+        cursor.execute(query, (name, email, phoneNumber, referrerId))
+        db.get_db().commit()
+
+        res = make_response(jsonify({"message": "Referrer information updated successfully"}))
+        res.status_code = 200
+    except Exception as e:
+        current_app.logger.error(f"Error updating referrer information: {str(e)}")
+        res = make_response(jsonify({"error": str(e)}))
+        res.status_code = 500
+
+    return res
