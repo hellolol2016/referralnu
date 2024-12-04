@@ -36,7 +36,7 @@ if st.button("Change Application Status",
 if st.button("Communicate Requirements",
              type='primary',
              use_container_width=True):
-  st.switch_page('pages/referrer/con.py')
+  st.switch_page('pages/referrer/cons.py')
 
 # 4.5
 if st.button("Student Referral Status",
