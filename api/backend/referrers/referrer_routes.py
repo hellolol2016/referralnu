@@ -4,7 +4,7 @@ from backend.db_connection import db
 referrers = Blueprint('Referrers', __name__)
 
 
-@referrers.route("/referrers", methods=["GET"])
+@referrers.route("/", methods=["GET"])
 def get_referrers():
     query = '''
         SELECT r.referrerId, 
@@ -67,6 +67,30 @@ def create_referrer():
 
     return res
 
+@referrers.route("/<referrerId>" , methods=["GET"])
+def get_referrer(referrerId):
+    query = '''
+        SELECT r.referrerId, 
+               r.name, 
+               r.email,
+               r.numReferrals,
+               c.name as company_name
+        FROM Referrers r
+        JOIN Companies c ON r.companyId = c.companyId
+        WHERE r.referrerId = %s
+    '''
+
+    try:
+        cursor = db.get_db().cursor()
+        cursor.execute(query, (referrerId,))
+        data = cursor.fetchall()
+        res = make_response(jsonify(data))
+        res.status_code = 200
+    except Exception as e:
+        res = make_response(jsonify({"error": str(e)}))
+        res.status_code = 500
+
+    return res
 
 @referrers.route("/<referrerId>", methods=["PUT"])
 def create_request(referrerId):

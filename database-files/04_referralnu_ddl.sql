@@ -80,7 +80,7 @@ CREATE TABLE Connections
 (
     connectionId INT PRIMARY KEY AUTO_INCREMENT,
     referrerId   INT NOT NULL,
-    creationDate TIMESTAMP,
+    creationDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     studentId    INT NOT NULL,
     FOREIGN KEY (referrerId) REFERENCES Referrers (referrerId)
         ON UPDATE CASCADE
