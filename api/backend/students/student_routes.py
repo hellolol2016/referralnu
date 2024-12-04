@@ -75,7 +75,7 @@ def update_or_remove_advisor(advisorId):
 
 
 
-@students.route('/<studentId>', methods = ['GET'])
+@students.route('/<studentId>/results', methods = ['GET'])
 def get_results_by_student(studentId):
 
 
