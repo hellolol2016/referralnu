@@ -1,35 +1,54 @@
 # 4.4
 
-from flask import Blueprint, jsonify, make_response, request, current_app
-from backend.db_connection import db
+import logging
+import streamlit as st
+import requests
 
-requests = Blueprint('Requests', __name__)
+# Base API URL
+BASE_API_URL = "http://web-api:4000/referrer"
 
-@requests.route("/connections/<requestId>", methods=["POST"])
-def create_connections(requestId):
+# Configure logger
+logger = logging.getLogger(__name__)
 
-    req = request.json
-    current_app.logger.info(req)
+# App Title
+st.title("Update Referrer Information")
 
-    studentId = req.get("studentId")
-    referrerId = req.get("referrerId")
-
-    query = f"""
-        INSERT INTO Connections (referrerId, studentId)
-        VALUES ({referrerId}, {studentId})
-    """
-
-    current_app.logger.info(query)
-
+# Function to update referrer information
+def update_referrer_info(referrer_id, name, email, phone_number):
+    payload = {
+        "name": name,
+        "email": email,
+        "phoneNumber": phone_number
+    }
     try:
-        cursor = db.get_db().cursor()
-        cursor.execute(query)
-        db.get_db().commit()
-        res = make_response(jsonify({"message": "Connection created successfully"}))
-        res.status_code = 201
+        response = requests.put(f"{BASE_API_URL}/{referrer_id}", json=payload)
+        if response.status_code == 200:
+            return response.json()
+        else:
+            st.error(f"Failed to update referrer information: {response.status_code}")
+            st.write(response.text)
+            return None
     except Exception as e:
-        current_app.logger.error(f"Error creating connection: {str(e)}")
-        res = make_response(jsonify({"error": str(e)}))
-        res.status_code = 500
+        st.error(f"Error: {str(e)}")
+        return None
 
-    return res
+# Input fields for updating referrer information
+referrer_id = st.text_input("Enter Referrer ID")
+name = st.text_input("Enter Name")
+email = st.text_input("Enter Email")
+phone_number = st.text_input("Enter Phone Number")
+
+# Update button
+if st.button("Update Referrer Information"):
+    # Validate inputs
+    if not referrer_id or not name or not email or not phone_number:
+        st.warning("All fields are required to update referrer information.")
+    else:
+        # Call the update function
+        result = update_referrer_info(referrer_id, name, email, phone_number)
+
+        if result:
+            st.success("Referrer information updated successfully!")
+            st.json(result)
+        else:
+            st.error("Failed to update referrer information.")
