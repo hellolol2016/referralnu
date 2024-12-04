@@ -1,38 +1,54 @@
 # 4.1
 
-from flask import Blueprint, jsonify, make_response, request, current_app
-from backend.db_connection import db
+import logging
+import streamlit as st
+import requests
 
-requests = Blueprint('Requests', __name__)
+BASE_API_URL = "http://web-api:4000/referrer"
+GET_STUDENT_REQUESTS_URL = "http://web-api:4000/students"
 
-@requests.route("/student/<studentId>", methods=["GET"])
-def get_student_requests(studentId):
-    query = """
-            SELECT S.studentId, 
-            S.firstName,
-            S.lastName, 
-            S.phoneNumber,
-            S.email,
-            R.companyId AS referredCompany, 
-            C.creationDate AS referralDate
-            FROM Connections C
-            JOIN Referrers R ON C.referrerId = R.referrerId
-            JOIN Students S ON C.studentId = S.studentId
-            WHERE S.studentId = %s
-        """
+logger = logging.getLogger(__name__)
 
-    current_app.logger.info(f"GET /student/{studentId} query: {query}")
+st.title("View all Resumes")
 
+# Function to fetch student resume information
+def fetch_student_requests(student_id):
     try:
-        cursor = db.get_db().cursor()
-        cursor.execute(query, (studentId,))
-        data = cursor.fetchall()
-        res = make_response(jsonify(data))
-        res.status_code = 200
+        response = requests.get(f"{GET_STUDENT_REQUESTS_URL}/{student_id}")
+        if response.status_code == 200:
+            return response.json()
+        else:
+            st.error(f"Failed to fetch student data: {response.status_code}")
+            st.write(response.text)
+            return []
     except Exception as e:
-        res = make_response(jsonify({"error": str(e)}))
-        res.status_code = 500
+        st.error(f"Error: {str(e)}")
+        return []
 
-    return res
+# Input for Student ID
+student_id = st.text_input("Enter Student ID")
 
-# requests.get(http://web-api:4000/students/1)
+# Fetch and display the resume data
+if student_id:
+    if st.button("Fetch Resume Information"):
+        # Fetch data from the backend API
+        student_requests = fetch_student_requests(student_id)
+
+        if student_requests:
+            st.success("Resume information loaded successfully!")
+
+            # Format and display the data
+            st.subheader("Student Resume Information")
+            for student in student_requests:
+                st.markdown(f"**Student ID:** {student['studentId']}")
+                st.markdown(f"**First Name:** {student['firstName']}")
+                st.markdown(f"**Last Name:** {student['lastName']}")
+                st.markdown(f"**Phone Number:** {student['phoneNumber']}")
+                st.markdown(f"**Email:** {student['email']}")
+                st.markdown(f"**Referred Company:** {student['referredCompany']}")
+                st.markdown(f"**Referral Date:** {student['referralDate']}")
+                st.markdown("---")
+        else:
+            st.warning("No resume information found for the given Student ID.")
+else:
+    st.warning("Please enter a Student ID.")
