@@ -340,8 +340,8 @@ def update_referrer_info(referrerId):
 
     return res
 
-@requests.route("/student/<int:student_id>", methods=["GET"])
-def get_requests_by_student(student_id):
+@requests.route("/student/<studentId>", methods=["GET"])
+def get_requests_by_student(studentId):
     query = """
         SELECT 
             r.requestId,
@@ -361,7 +361,7 @@ def get_requests_by_student(student_id):
     """
     try:
         cursor = db.get_db().cursor()
-        cursor.execute(query, (student_id,))
+        cursor.execute(query, (studentId,))
         data = cursor.fetchall()
         return jsonify(data)
     except Exception as e:
