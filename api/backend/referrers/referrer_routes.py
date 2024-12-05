@@ -92,7 +92,7 @@ def get_referrer(referrerId):
     return res
 
 @referrers.route("/<referrerId>", methods=["PUT"])
-def create_request(referrerId):
+def update_referrer(referrerId):
 
     req = request.json
     current_app.logger.info(req)
@@ -171,8 +171,6 @@ def get_best_referrers():
         res.status_code = 500
 
     return res
-
-
 
 @referrers.route("/left", methods=["GET"])
 def get_best_referrers_left():

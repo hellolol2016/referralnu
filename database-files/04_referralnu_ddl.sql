@@ -560,6 +560,7 @@ VALUES
 
 insert into Messages (messageContent, adminId, connectionId, referrerId, studentId, studentSent) values
 ('I hope you are doing well. I wanted to reach out to introduce myself and express my interest in learning more about your work in the industry.', 33, 24, 36, 20, true),
+('GOSH DANG IT', 33, 24, 36, 20, true),
 ('I recently came across your work, and I am very interested in the insights you have shared on [specific topic]. I would love to hear more about your experience in the field.', 33, 57, 27, 11, true),
 ('Thank you for taking the time to meet with me. I found our conversation very valuable and would appreciate any advice you might have for someone entering the industry.', 21, 9, 28, 10, false),
 ('I hope this message finds you well. I am currently exploring career opportunities in [industry], and I would love to connect with you to learn more about your journey.', 32, 15, 40, 38, true),

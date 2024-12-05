@@ -70,7 +70,7 @@ if st.button('Act as Katherine Brown, a Co-op Advisor',
             use_container_width=True):
     st.session_state['authenticated'] = True
     st.session_state['role'] = 'advisor'
-    st.session_state['first_name'] = 'SysAdmin'
+    st.session_state['first_name'] = 'Katherine Brown'
     st.switch_page('pages/31_Advisor_Home.py')
 
 if st.button('Act as Max Grahm, Referrer Giver',
