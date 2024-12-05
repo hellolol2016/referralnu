@@ -23,7 +23,7 @@ if st.button('Get top referrers', type='primary', use_container_width=True):
             st.success("Results Fetched Successfully!")
             st.json(data) 
         else:
-            st.warning("No data found for the given Student ID.")
+            st.warning("No data found for the Referrer.")
     except requests.exceptions.RequestException as e:
             logger.error(f"Error fetching data for top referrers: {e}")
-            st.error(f"Failed to fetch student results. Please try again later.")
+            st.error(f"Failed to fetch referrer results. Please try again later.")

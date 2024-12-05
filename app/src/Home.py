@@ -26,7 +26,7 @@ st.session_state['authenticated'] = False
 # the links displayed on the left-side panel. 
 # IMPORTANT: ensure src/.streamlit/config.toml sets
 # showSidebarNavigation = false in the [client] section
-SideBarLinks(show_home=True)
+SideBarLinks()
 
 # ***************************************************
 #    The major content of this page
