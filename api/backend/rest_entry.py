@@ -4,7 +4,6 @@ from backend.db_connection import db
 from backend.customers.customer_routes import customers
 from backend.products.products_routes import products
 from backend.referrers.referrer_routes import referrers
-from backend.simple.simple_routes import simple_routes
 from backend.messages.message_routes import messages
 from backend.requests.requests_routes import requests
 from backend.connections.connections_routes import connections
