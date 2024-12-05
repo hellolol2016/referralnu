@@ -220,39 +220,6 @@ def get_request_company(companyId):
 
     return res
 
-# @requests.route("/requests/<referrerId>", methods=["PUT"])
-# def update_request_status(referrerId):
-
-#     req = request.json
-#     current_app.logger.info(req)
-
-#     requestId = req.get("requestId", [])
-#     status = req.get("status")
-
-#     query = """
-#         UPDATE Requests
-#         SET status = %s
-#         WHERE requestId IN (%s) AND referrerId = %s
-#     """ % (', '.join(['%s'] * len(requestId)))
-
-#     current_app.logger.info(f'PUT /requests/<referrerId> query: {query}')
-
-#     try:
-#         cursor = db.get_db().cursor()
-#         cursor.execute(query, (status, requestId, referrerId))
-#         db.get_db().commit()
-
-#         res = make_response(jsonify({"message": f"Updated successful"}))
-#         res.status_code = 200
-#     except Exception as e:
-#         current_app.logger.error(f"Error updating referrer details: {str(e)}")
-#         res = make_response(jsonify({"error": str(e)}))
-#         res.status_code = 500
-
-#     return res
-
-
-
 @requests.route("/student/<studentId>", methods=["GET"])
 def get_student_requests(studentId):
     query = """
@@ -369,5 +336,42 @@ def get_requests_by_student(student_id):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+
+@requests.route("/<student_id>/<status>", methods=["GET"])
+def get_requests_by_student_and_status(student_id, status):
+    query = """
+        SELECT 
+            r.requestId, 
+            r.studentId, 
+            r.companyId, 
+            r.pendingStatus, 
+            r.createdAt, 
+            s.firstName, 
+            s.lastName,
+            ref.name AS referrerName
+        FROM Requests r
+        JOIN Students s ON r.studentId = s.studentId
+        JOIN Referrers ref ON r.companyId = ref.companyId
+        WHERE r.pendingStatus = %s AND r.studentId = %s
+    """
+    current_app.logger.info(f"GET /{student_id}/{status} query: {query}")
+
+    try:
+        cursor = db.get_db().cursor()
+        cursor.execute(query, (status, student_id))  # Passing both status and student_id
+        data = cursor.fetchall()
+
+        # If no data found, return a 404 response or an empty list
+        if not data:
+            res = make_response(jsonify([]))  # Returning an empty list if no requests found
+            res.status_code = 200
+        else:
+            res = make_response(jsonify(data))
+            res.status_code = 200
+    except Exception as e:
+        res = make_response(jsonify({"error": str(e)}))
+        res.status_code = 500
+
+    return res
 
 
