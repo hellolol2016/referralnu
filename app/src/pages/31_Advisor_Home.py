@@ -23,5 +23,5 @@ if st.button('Track Advisor Results', type='primary', use_container_width=True):
 if st.button('Find Best Referral Givers', type='primary', use_container_width=True):
      st.switch_page("pages/Advisor_Recommendations.py")
 
-if st.button('Message Students', type='primary', use_container_width=True):
+if st.button('Message Students and Follow-up', type='primary', use_container_width=True):
      st.switch_page("pages/Advisor_followup.py")

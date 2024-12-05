@@ -8,7 +8,6 @@ import pandas as pd
 
 st.set_page_config(layout = 'wide')
 
-# Show appropriate sidebar links for the role of the currently logged in user
 SideBarLinks()
 
 advisor_endpoint = "http://web-api:4000/advisors/set_reminder"
@@ -39,5 +38,4 @@ if st.button('Get Advisor Results', type='primary', use_container_width=True):
             error_message = response.json().get('error', 'An error occurred.')
             st.error(f"Failed to set reminder: {error_message}")
     except requests.exceptions.RequestException as e:
-        logger.error(f"Error setting reminder: {e}")
         st.error("Failed to connect to the server. Please try again later.")
