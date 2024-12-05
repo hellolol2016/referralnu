@@ -10,7 +10,7 @@ BASE_API_URL = "http://web-api:4000/requests"
 UPDATE_STATUS_URL = "http://web-api:4000/status"
 
 # Streamlit App Title
-st.title("View and Update Request Details by Student ID")
+st.title("View and Update Request Details by Student")
 
 # Input for Student ID
 student_id = st.text_input("Enter Student ID")
