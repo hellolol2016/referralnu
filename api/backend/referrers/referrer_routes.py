@@ -92,7 +92,7 @@ def get_referrer(referrerId):
     return res
 
 @referrers.route("/<referrerId>", methods=["PUT"])
-def create_request(referrerId):
+def update_referrer(referrerId):
 
     req = request.json
     current_app.logger.info(req)
