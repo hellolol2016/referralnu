@@ -26,6 +26,11 @@ except Exception as e:
 
 search_query = st.text_input("Search messages by content")
 
+if(st.button("Delete all messages with keyword")):
+    requests.delete(f"{messages_endpoint}/keyword/{search_query}")
+    st.write("Deleted all messages with keyword")
+    st.rerun()
+
 # Filter connections based on the search query
 if messages:
     filtered_mes= []
@@ -59,7 +64,7 @@ if filtered_mes:
             except Exception as e:
                 referrer_name = "unknown referrer"
             st.markdown(f"**From:** {referrer_name}")
-          st.write(f"{message.get('messageContent', 'No content')}")
+          st.markdown(f'{message.get("messageContent", "No content")}')
           #st.markdown(f"**Sent At:** {message.get('sentAt', 'Unknown time')}")
           st.markdown("---")
 else:

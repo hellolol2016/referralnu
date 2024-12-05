@@ -15,7 +15,7 @@ referrer_endpoint = "http://web-api:4000/referrers"
 
 if st.button('Get top referrers', type='primary', use_container_width=True):
     try:
-        endpoint = f"{referrer_endpoint}/top"
+        endpoint = f"{referrer_endpoint}/best"
         logger.debug(endpoint)
         response = requests.get(endpoint)
         data = response.json()
@@ -23,7 +23,7 @@ if st.button('Get top referrers', type='primary', use_container_width=True):
             st.success("Results Fetched Successfully!")
             st.json(data) 
         else:
-            st.warning("No data found for the given Student ID.")
+            st.warning("No data found for the Referrer.")
     except requests.exceptions.RequestException as e:
             logger.error(f"Error fetching data for top referrers: {e}")
-            st.error(f"Failed to fetch student results. Please try again later.")
+            st.error(f"Failed to fetch referrer results. Please try again later.")
