@@ -673,3 +673,4 @@ insert into Advisor_Messages (studentId, advisorId, content) values
 (37, 11, 'I`m wondering if you could clarify the grading process for our final project. How should we format it?'),
 (39, 32, 'Could you provide more information about the upcoming class presentation? I want to ensure I`m fully prepared.');
 
+

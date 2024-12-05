@@ -51,8 +51,9 @@ if st.button("Update Referrer Information"):
         st.markdown(f"**Email:** {email}")
         st.markdown(f"**Phone Number:** {phone_number}")
 
+
         # Display the status of the update operation
-        if result:
-            st.success("Referrer information updated successfully!")
-        else:
-            st.error("Updated referrer information.")
+        # if result:
+            # st.success("Referrer information updated successfully!")
+        # else:
+            # st.error("Referrer information failed to update.")

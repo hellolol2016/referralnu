@@ -339,3 +339,31 @@ def update_referrer_info(referrerId):
         res.status_code = 500
 
     return res
+
+@requests.route("/student/<int:student_id>", methods=["GET"])
+def get_requests_by_student(student_id):
+    query = """
+        SELECT 
+            r.requestId,
+            r.studentId,
+            r.pendingStatus,
+            r.companyId,
+            r.createdAt,
+            r.lastViewed,
+            r.viewCount,
+            s.firstName,
+            s.lastName,
+            s.email,
+            s.phoneNumber
+        FROM Requests r
+        JOIN Students s ON r.studentId = s.studentId
+        WHERE r.studentId = %s
+    """
+    try:
+        cursor = db.get_db().cursor()
+        cursor.execute(query, (student_id,))
+        data = cursor.fetchall()
+        return jsonify(data)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+

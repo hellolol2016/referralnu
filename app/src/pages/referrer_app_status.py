@@ -1,46 +1,45 @@
-# 4.3
-
-import logging
 import streamlit as st
 import requests
 
-# Backend API URL for updating status
-UPDATE_STATUS_URL = "http://web-api:4000/status"
+# Base API URL
+BASE_API_URL = "http://web-api:4000/students"
 
-# Setup logging
-logger = logging.getLogger(__name__)
+# Streamlit App Title
+st.title("View Request Details by Student ID")
 
-# Page Title
-st.title("Change Application Status")
+# Input for Student ID
+student_id = st.text_input("Enter Student ID")
 
-# Function to update request status
-def update_request_status(request_id, pending_status):
-    try:
-        # API call to update the request status
-        payload = {"pendingStatus": pending_status}
-        url = f"{UPDATE_STATUS_URL}/{request_id}"  # Append requestId to the URL
-        response = requests.put(url, json=payload)
-
-        if response.status_code == 200:
-            st.success(f"Request ID {request_id} status updated to '{pending_status}' successfully!")
-        else:
-            st.error(f"Failed to update request status: {response.status_code}")
-            st.write(response.text)
-    except Exception as e:
-        st.error(f"Error: {str(e)}")
-
-# Input for Request ID and Pending Status
-request_id = st.text_input("Enter Request ID", help="Enter the unique ID of the request")
-pending_status = st.selectbox(
-    "Select New Status",
-    options=["Pending", "Approved", "Rejected"],
-    index=0,
-    help="Select the new pending status for the request"
-)
-
-# Button to update status
-if st.button("Update Status"):
-    if request_id and pending_status:
-        update_request_status(request_id, pending_status.lower())
+# Fetch and display request details
+if st.button("Fetch Request Details"):
+    if not student_id:
+        st.warning("Please enter a Student ID.")
     else:
-        st.warning("Please provide both Request ID and a valid status.")
+        try:
+            url = f"{BASE_API_URL}/{student_id}"
+            response = requests.get(url)
+
+            if response.status_code == 200:
+                data = response.json()
+                st.subheader("Request Details")
+                st.write("Debug: API Response")
+                st.write(data)  # Debugging step
+
+                if data:
+                    for item in data:
+                        # Safely retrieve fields with default values if missing
+                        pending_status = item.get('pendingStatus', 'Not Available')
+                        first_name = item.get('firstName', 'Unknown')
+                        last_name = item.get('lastName', 'Unknown')
+
+                        st.markdown(f"**Pending Status:** {pending_status}")
+                        st.markdown(f"**Student Name:** {first_name} {last_name}")
+                        st.markdown("---")
+                else:
+                    st.warning("No requests found for the given Student ID.")
+            elif response.status_code == 404:
+                st.warning("No requests found for the given Student ID.")
+            else:
+                st.error(f"Failed to fetch request details. HTTP Status: {response.status_code}")
+        except Exception as e:
+            st.error(f"Error fetching request details: {str(e)}")
