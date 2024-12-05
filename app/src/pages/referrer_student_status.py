@@ -52,6 +52,10 @@ def update_application_status(referrer_id, student_id, new_status):
 referrer_id = st.text_input("Enter Referrer ID")
 student_id = st.text_input("Enter Student ID")
 
+# Local state to manage whether the current status is displayed
+if "current_status" not in st.session_state:
+    st.session_state.current_status = None
+
 # View application status
 if st.button("View Application Status"):
     if not referrer_id or not student_id:
@@ -63,6 +67,7 @@ if st.button("View Application Status"):
         # Display the result
         if "error" in result:
             st.error(result["error"])
+            st.session_state.current_status = None
         else:
             # Filter the specific student's status
             student_status = next(
@@ -71,22 +76,29 @@ if st.button("View Application Status"):
             )
 
             if student_status:
-                st.subheader("Application Status")
-                st.markdown(f"**Referrer ID:** {referrer_id}")
-                st.markdown(f"**Student ID:** {student_id}")
-                st.markdown(f"**Status:** {student_status.get('applicationStatus', 'N/A')}")
-
-                # Allow user to update the application status
-                new_status = st.text_input("Enter New Status for the Application")
-                if st.button("Update Application Status"):
-                    if not new_status:
-                        st.warning("New status is required to update the application.")
-                    else:
-                        update_result = update_application_status(referrer_id, student_id, new_status)
-
-                        if "error" in update_result:
-                            st.error(update_result["error"])
-                        else:
-                            st.success(update_result["message"])
+                st.session_state.current_status = student_status.get('applicationStatus', 'N/A')
+                st.success("Application status fetched successfully.")
             else:
                 st.error("Application status not found for the given Student ID.")
+                st.session_state.current_status = None
+
+# Display the current application status and update option if status is fetched
+if st.session_state.current_status:
+    st.subheader("Current Application Status")
+    st.markdown(f"**Referrer ID:** {referrer_id}")
+    st.markdown(f"**Student ID:** {student_id}")
+    st.markdown(f"**Status:** {st.session_state.current_status}")
+
+    # Allow user to update the application status
+    new_status = st.text_input("Enter New Status for the Application")
+    if st.button("Update Application Status"):
+        if not new_status:
+            st.warning("New status is required to update the application.")
+        else:
+            update_result = update_application_status(referrer_id, student_id, new_status)
+
+            if "error" in update_result:
+                st.error(update_result["error"])
+            else:
+                st.success(update_result["message"])
+                st.session_state.current_status = new_status
