@@ -27,3 +27,20 @@ def get_customers(companyId):
     the_response = make_response(jsonify(theData))
     the_response.status_code = 200
     return the_response
+
+
+@companies.route('/<int:company_id>', methods=['DELETE'])
+def delete_company(company_id):
+    try:
+        # Connect to the database
+        cursor = db.get_db().cursor()
+
+        # Execute the DELETE query
+        cursor.execute("DELETE FROM Companies WHERE companyId = %s", (company_id,))
+        db.get_db().commit()
+
+        # Return success response
+        return jsonify({"message": "Company deleted successfully"}), 200
+    except Exception as e:
+        current_app.logger.error(f"Error deleting company: {str(e)}")
+        return jsonify({"error": str(e)}), 500
