@@ -42,6 +42,7 @@ def ReferrerPageNav():
     st.sidebar.page_link("pages/Referrer_Home.py", label = "Referrer")
     st.sidebar.page_link("pages/referrer_remove_company.py", label = "Change Employment")
     st.sidebar.page_link("pages/referrer_all_resumes.py", label = "Resumes")
+    st.sidebar.page_link("pages/referrer_app_status.py", label="Application Status'")
 
 
 # --------------------------------Links Function -----------------------------------------------
