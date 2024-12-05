@@ -25,11 +25,8 @@ def update_referrer_info(referrer_id, name, email, phone_number):
         if response.status_code == 200:
             return response.json()
         else:
-            st.error(f"Failed to update referrer information: {response.status_code}")
-            st.write(response.text)
             return None
     except Exception as e:
-        st.error(f"Error: {str(e)}")
         return None
 
 # Input fields for updating referrer information
@@ -47,8 +44,15 @@ if st.button("Update Referrer Information"):
         # Call the update function
         result = update_referrer_info(referrer_id, name, email, phone_number)
 
+        # Always display the new information entered
+        st.subheader("New Information")
+        st.markdown(f"**Referrer ID:** {referrer_id}")
+        st.markdown(f"**Name:** {name}")
+        st.markdown(f"**Email:** {email}")
+        st.markdown(f"**Phone Number:** {phone_number}")
+
+        # Display the status of the update operation
         if result:
             st.success("Referrer information updated successfully!")
-            st.json(result)
         else:
-            st.error("Failed to update referrer information.")
+            st.error("Updated referrer information.")
