@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 
 # Base API URL
-BASE_API_URL = "http://web-api:4000/students"
+BASE_API_URL = "http://web-api:4000/requests/student"
 
 # Streamlit App Title
 st.title("View Request Details by Student ID")
