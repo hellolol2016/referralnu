@@ -15,7 +15,7 @@ referrer_endpoint = "http://web-api:4000/referrers"
 
 if st.button('Get top referrers', type='primary', use_container_width=True):
     try:
-        endpoint = f"{referrer_endpoint}/top"
+        endpoint = f"{referrer_endpoint}/best"
         logger.debug(endpoint)
         response = requests.get(endpoint)
         data = response.json()

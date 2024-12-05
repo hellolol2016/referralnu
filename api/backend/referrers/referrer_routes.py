@@ -139,7 +139,7 @@ def get_best_referrers():
        ref.email, 
        ref.phoneNumber,
        c.name AS companyName
-    FROM Referrers ref 
+    FROM Referrers ref
     JOIN Companies c ON ref.companyId = c.companyId
     JOIN (
     SELECT r.companyId
@@ -147,8 +147,9 @@ def get_best_referrers():
     WHERE r.pendingStatus = 'accepted'
     GROUP BY r.companyId
     ORDER BY COUNT(*) DESC
-    LIMIT %s  
-    ) AS TopCompanies ON ref.companyId = TopCompanies.companyId;
+    ) AS TopCompanies ON ref.companyId = TopCompanies.companyId
+    LIMIT %s;
+
 
 
     """
