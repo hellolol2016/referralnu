@@ -52,6 +52,26 @@ def add_message(referrerId, studentId):
         res.status_code = 500
     return res
 
+@messages.route("/", methods=["GET"])
+def get_all_messages():
+    query = '''
+      SELECT * FROM Messages 
+      ORDER BY sentAt 
+    '''
+
+    current_app.logger.info(f'GET conversation/<connectionId> query: {query}')
+
+    try:
+        cursor = db.get_db().cursor()
+        cursor.execute(query)
+        data = cursor.fetchall()
+        res = make_response(jsonify(data))
+        res.status_code = 200
+    except Exception as e:
+        res = make_response(jsonify({"error fetching conversation": str(e)}))
+        res.status_code = 500
+    return res
+
 @messages.route("/conversation/<connectionId>", methods=["GET"])
 def get_conversation(connectionId):
     query = '''

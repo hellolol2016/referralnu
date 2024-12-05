@@ -223,3 +223,6 @@ def send_reminder(studentId):
         current_app.logger.error(f"Error sending reminders: {str(e)}")
         return make_response(jsonify({"error": str(e)}), 500)
 
+
+
+

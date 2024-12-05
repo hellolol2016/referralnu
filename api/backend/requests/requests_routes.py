@@ -52,6 +52,7 @@ def create_request():
         res.status_code = 201
     except Exception as e:
         current_app.logger.error(f"Error creating request: {str(e)}")
+
         res = make_response(jsonify({"error": str(e)}))
         res.status_code = 500
 
@@ -250,6 +251,8 @@ def get_request_company(companyId):
 
 #     return res
 
+
+
 @requests.route("/student/<studentId>", methods=["GET"])
 def get_student_requests(studentId):
     query = """
@@ -340,8 +343,8 @@ def update_referrer_info(referrerId):
 
     return res
 
-@requests.route("/student/<studentId>", methods=["GET"])
-def get_requests_by_student(studentId):
+@requests.route("/student/<student_id>", methods=["GET"])
+def get_requests_by_student(student_id):
     query = """
         SELECT 
             r.requestId,
@@ -356,14 +359,15 @@ def get_requests_by_student(studentId):
             s.email,
             s.phoneNumber
         FROM Requests r
-        JOIN Students s ON r.studentId = s.studentId
         WHERE r.studentId = %s
     """
     try:
         cursor = db.get_db().cursor()
-        cursor.execute(query, (studentId,))
+        cursor.execute(query, (student_id,))
         data = cursor.fetchall()
         return jsonify(data)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
 

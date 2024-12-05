@@ -19,7 +19,7 @@ if st.button('View All Requests',
              use_container_width=True):
   st.switch_page('pages/admin_all_reqs.py')
 
-if st.button('Manage Connections / Conversations', 
+if st.button('Manage Connections', 
              type='primary',
              use_container_width=True):
   st.switch_page('pages/admin_all_cons.py')
@@ -29,7 +29,7 @@ if st.button('Contact Student',
              use_container_width=True):
   st.switch_page('pages/admin_student_messages.py')
 
-if st.button('Remove user', 
+if st.button('Manage Messages', 
              type='primary',
              use_container_width=True):
-  st.switch_page('pages/admin_remove_student.py')
+  st.switch_page('pages/admin_message_mod.py')

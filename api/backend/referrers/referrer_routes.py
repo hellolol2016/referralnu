@@ -139,7 +139,7 @@ def get_best_referrers():
        ref.email, 
        ref.phoneNumber,
        c.name AS companyName
-    FROM Referrers ref 
+    FROM Referrers ref
     JOIN Companies c ON ref.companyId = c.companyId
     JOIN (
     SELECT r.companyId
@@ -147,8 +147,9 @@ def get_best_referrers():
     WHERE r.pendingStatus = 'accepted'
     GROUP BY r.companyId
     ORDER BY COUNT(*) DESC
-    LIMIT %s  
-    ) AS TopCompanies ON ref.companyId = TopCompanies.companyId;
+    ) AS TopCompanies ON ref.companyId = TopCompanies.companyId
+    LIMIT %s;
+
 
 
     """
@@ -207,54 +208,3 @@ def get_best_referrers_left():
 
     return res
 
-@referrers.route("/top", methods=["GET"])
-def get_top_referrers():
-    query = '''
-        SELECT r.referrerId, 
-               r.name, 
-               r.numReferrals, 
-               c.name as company_name
-        FROM Referrers r
-        JOIN Companies c ON r.companyId = c.companyId
-        ORDER BY r.numReferrals DESC
-        LIMIT 10
-    '''
-
-    try:
-        cursor = db.get_db().cursor()
-        cursor.execute(query)
-        data = cursor.fetchall()
-        res = make_response(jsonify(data))
-        res.status_code = 200
-    except Exception as e:
-        current_app.logger.error(f"Error fetching top referrers: {str(e)}")
-        res = make_response(jsonify({"error": str(e)}))
-        res.status_code = 500
-
-    return res
-
-@referrers.route("/least", methods=["GET"])
-def get_least_referrers():
-    query = '''
-        SELECT r.referrerId, 
-               r.name, 
-               r.numReferrals, 
-               c.name as company_name
-        FROM Referrers r
-        JOIN Companies c ON r.companyId = c.companyId
-        ORDER BY r.numReferrals ASC
-        LIMIT 10
-    '''
-
-    try:
-        cursor = db.get_db().cursor()
-        cursor.execute(query)
-        data = cursor.fetchall()
-        res = make_response(jsonify(data))
-        res.status_code = 200
-    except Exception as e:
-        current_app.logger.error(f"Error fetching top referrers: {str(e)}")
-        res = make_response(jsonify({"error": str(e)}))
-        res.status_code = 500
-
-    return res
