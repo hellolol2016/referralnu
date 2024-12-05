@@ -19,7 +19,7 @@ student_id = st.text_input("Enter Student ID:")
 message = st.text_area("Enter Message:")
 follow_up_days = st.number_input("Follow-Up Days (optional, default 3 days):", min_value=1, value=3)
 
-if st.button('Get Advisor Results', type='primary', use_container_width=True):
+if st.button('Get Follow-up Date', type='primary', use_container_width=True):
     if not advisor_id or not student_id or not message:
         st.error("Please provide all required fields: Advisor ID, Student ID, and Message.")
     else:
