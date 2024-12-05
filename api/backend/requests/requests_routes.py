@@ -220,39 +220,6 @@ def get_request_company(companyId):
 
     return res
 
-# @requests.route("/requests/<referrerId>", methods=["PUT"])
-# def update_request_status(referrerId):
-
-#     req = request.json
-#     current_app.logger.info(req)
-
-#     requestId = req.get("requestId", [])
-#     status = req.get("status")
-
-#     query = """
-#         UPDATE Requests
-#         SET status = %s
-#         WHERE requestId IN (%s) AND referrerId = %s
-#     """ % (', '.join(['%s'] * len(requestId)))
-
-#     current_app.logger.info(f'PUT /requests/<referrerId> query: {query}')
-
-#     try:
-#         cursor = db.get_db().cursor()
-#         cursor.execute(query, (status, requestId, referrerId))
-#         db.get_db().commit()
-
-#         res = make_response(jsonify({"message": f"Updated successful"}))
-#         res.status_code = 200
-#     except Exception as e:
-#         current_app.logger.error(f"Error updating referrer details: {str(e)}")
-#         res = make_response(jsonify({"error": str(e)}))
-#         res.status_code = 500
-
-#     return res
-
-
-
 @requests.route("/student/<studentId>", methods=["GET"])
 def get_student_requests(studentId):
     query = """
