@@ -1,68 +1,63 @@
-# 4.2
-
-import logging
 import streamlit as st
 import requests
 
-# Base API URL
-BASE_API_URL = "http://web-api:4000/referrer"
+# Back button
+if st.button("← Back to Home"):
+    st.switch_page("pages/Referrer_Home.py")
 
-# Configure logger
-logger = logging.getLogger(__name__)
+st.title("Manage Companies")
 
-# Streamlit App Title
-st.title("Manage Referrer's Company List")
+# API Endpoint
+companies_endpoint = "http://web-api:4000/companies"
 
-# Function to include a company for referrals
-def include_company(referrer_id, company_id):
-    payload = {"action": "include", "companyId": company_id}
+# Store locally "deleted" companies
+if "deleted_companies" not in st.session_state:
+    st.session_state.deleted_companies = set()
+
+# Search bar for company ID
+company_id_query = st.text_input("Search company by ID")
+
+# If a company ID is provided, fetch and display the company information
+if company_id_query:
     try:
-        response = requests.put(f"{BASE_API_URL}/{referrer_id}/companies", json=payload)
+        # Fetch company information
+        response = requests.get(f"{companies_endpoint}/{company_id_query}")
+
+        # Check for valid response
         if response.status_code == 200:
-            return response.json()
+            company_data = response.json()
+
+            # Handle case where API returns a list
+            if isinstance(company_data, list) and company_data:
+                company = company_data[0]  # Access the first item in the list
+            elif isinstance(company_data, dict):
+                company = company_data
+            else:
+                st.warning("Invalid response format from the server.")
+                company = None
+
+            if company:
+                # Check if the company is in the deleted list
+                if str(company.get("companyId")) in st.session_state.deleted_companies:
+                    st.warning("This company has been removed from the page.")
+                else:
+                    # Display company details
+                    st.subheader("Company Information")
+                    st.markdown(f"**Company ID:** {company.get('companyId', 'N/A')}")
+                    st.markdown(f"**Company Name:** {company.get('name', 'N/A')}")
+
+                    # Remove company button
+                    if st.button("Remove Company", key=f"remove_{company.get('companyId')}"):
+                        st.session_state.deleted_companies.add(str(company.get("companyId")))
+                        st.success("Company removed from the page.")
+            else:
+                st.warning("No valid company data found.")
+        elif response.status_code == 404:
+            st.warning("Company not found.")
         else:
-            st.error(f"Failed to include company: {response.status_code}")
+            st.error(f"Failed to fetch company information: {response.status_code}")
             st.write(response.text)
-            return None
     except Exception as e:
-        st.error(f"Error: {str(e)}")
-        return None
-
-# Function to remove a company from referrals
-def remove_company(referrer_id, company_id):
-    payload = {"action": "remove", "companyId": company_id}
-    try:
-        response = requests.put(f"{BASE_API_URL}/{referrer_id}/companies", json=payload)
-        if response.status_code == 200:
-            return response.json()
-        else:
-            st.error(f"Failed to remove company: {response.status_code}")
-            st.write(response.text)
-            return None
-    except Exception as e:
-        st.error(f"Error: {str(e)}")
-        return None
-
-# Inputs for referrer and company details
-referrer_id = st.text_input("Enter Referrer ID")
-company_id = st.text_input("Enter Company ID")
-
-# Include company button
-if st.button("Include Company"):
-    if not referrer_id or not company_id:
-        st.warning("Referrer ID and Company ID are required to include a company.")
-    else:
-        result = include_company(referrer_id, company_id)
-        if result:
-            st.success("Company included successfully!")
-            st.json(result)
-
-# Remove company button
-if st.button("Remove Company"):
-    if not referrer_id or not company_id:
-        st.warning("Referrer ID and Company ID are required to remove a company.")
-    else:
-        result = remove_company(referrer_id, company_id)
-        if result:
-            st.success("Company removed successfully!")
-            st.json(result)
+        st.error(f"Error while fetching company information: {str(e)}")
+else:
+    st.write("Enter a Company ID to search.")
