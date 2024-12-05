@@ -63,6 +63,7 @@ def AdvisorPageNav():
     st.sidebar.page_link("pages/Advisor_Referral_Progress.py", label = "Progress")
     st.sidebar.page_link("pages/Advisor_Results.py", label = "Results")
     st.sidebar.page_link("pages/Advisor_Student_Info.py", label = "Student Info")
+    st.sidebar.page_link("pages/Advisor_followup.py", label = "Follow Up date")
 
 
 def ReferralSeekerPageNav():
@@ -74,6 +75,7 @@ def ReferrerPageNav():
     st.sidebar.page_link("pages/Referrer_Home.py", label = "Referrer")
     st.sidebar.page_link("pages/referrer_remove_company.py", label = "Change Employment")
     st.sidebar.page_link("pages/referrer_all_resumes.py", label = "Resumes")
+    st.sidebar.page_link("pages/referrer_app_status.py", label="Application Status")
 
 
 # --------------------------------Links Function -----------------------------------------------

@@ -65,9 +65,6 @@ if filtered_reqs:
             st.markdown(f"**Req ID:** {req['requestId']}")
             st.markdown(f"**Company Name:** {req['companyName']}")
             st.markdown(f"**Student Name:** {req['studentName']}")
-            if st.button("Delete Request", key=("delete", req['requestId'])):
-                requests.delete(f"{requests_endpoint}/{req['requestId']}")
-                st.rerun()
             st.markdown("---")
 else:
     st.write("No requests found.")
