@@ -13,7 +13,9 @@ companies_endpoint = "http://web-api:4000/companies"
 # Fetch all companies
 companies = []
 try:
-    companies = requests.get(companies_endpoint).json()
+    response = requests.get(companies_endpoint)
+    response.raise_for_status()  # Check for HTTP errors
+    companies = response.json()
 except Exception as e:
     st.write(e)
     st.error("**Important**: Could not connect to the API. Please try again later.")
