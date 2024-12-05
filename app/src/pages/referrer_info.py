@@ -4,6 +4,10 @@ import logging
 import streamlit as st
 import requests
 
+# Back button
+if st.button("← Back to Referrer Home"):
+    st.switch_page("pages/Referrer_Home.py")
+
 # Base API URL
 BASE_API_URL = "http://web-api:4000/referrer"
 

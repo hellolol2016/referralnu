@@ -34,15 +34,15 @@ SideBarLinks()
 
 # set the title of the page and provide a simple prompt. 
 logger.info("Loading the Home page of the app")
-st.title('CS 3200 Sample Semester Project App')
+st.title('ReferralNU')
 st.write('\n\n')
-st.write('### HI! As which user would you like to log in?')
+st.write('### Hi! As which user would you like to log in?')
 
 # For each of the user personas for which we are implementing
 # functionality, we put a button on the screen that the user 
 # can click to MIMIC logging in as that mock user. 
 
-if st.button("Act as Joseph, Admin of ReferralNU", 
+if st.button("Act as Joseph Gonzalez, Admin of ReferralNU",
             type = 'primary', 
             use_container_width=True):
     # when user clicks the button, they are now considered authenticated
@@ -57,7 +57,7 @@ if st.button("Act as Joseph, Admin of ReferralNU",
     logger.info("Logging in as Admin Persona")
     st.switch_page('pages/admin_home.py')
 
-if st.button('Act as Julia Baker, an Referral Seeker',
+if st.button('Act as Julia Baker, a Referral Seeker',
             type = 'primary', 
             use_container_width=True):
     st.session_state['authenticated'] = True
@@ -65,7 +65,7 @@ if st.button('Act as Julia Baker, an Referral Seeker',
     st.session_state['first_name'] = 'Julia'
     st.switch_page('pages/Referral_Seeker.py')
 
-if st.button('Act as Co-op Advisor', 
+if st.button('Act as Katherine Brown, a Co-op Advisor',
             type = 'primary', 
             use_container_width=True):
     st.session_state['authenticated'] = True
