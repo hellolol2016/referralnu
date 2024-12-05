@@ -21,19 +21,21 @@ menu = st.sidebar.selectbox("Choose a functionality", ["View Requests", "Create 
 
 # Handling "View Requests" functionality
 if menu == "View Requests":
-    st.header("View Requests by Status")
+    st.header("View Requests by Status and Student ID")
 
-    # Input for request status
+    # Input for request status and student ID
+    student_id = st.text_input("Enter Student ID", placeholder="e.g., '12345'")
     status = st.text_input("Enter Request Status", "Pending", placeholder="e.g., 'Pending', 'Accepted', 'Rejected'")
 
     if st.button("Fetch Requests"):
-        if status:
+        if student_id and status:
             try:
-                response = requests.get(f"{API_BASE_URL}/{status}")
+                # Constructing the API URL with both student_id and status
+                response = requests.get(f"{API_BASE_URL}/{student_id}/{status}")
                 if response.status_code == 200:
                     data = response.json()
                     if data:
-                        st.write(f"**Found {len(data)} requests with status '{status}':**")
+                        st.write(f"**Found {len(data)} requests for Student ID '{student_id}' with status '{status}':**")
 
                         df = pd.DataFrame(data)
 
@@ -43,13 +45,14 @@ if menu == "View Requests":
                         # Display the data in a table format
                         st.dataframe(df, use_container_width=True)
                     else:
-                        st.warning(f"No requests found with status '{status}'.")
+                        st.warning(f"No requests found for Student ID '{student_id}' with status '{status}'.")
                 else:
                     st.error(f"Error: {response.status_code} - {response.text}")
             except Exception as e:
                 st.error(f"API request failed: {e}")
         else:
-            st.error("Please enter a valid status.")
+            st.error("Please enter both a valid Student ID and Request Status.")
+
 
 # Handling "Create Request" functionality
 elif menu == "Create Request":
