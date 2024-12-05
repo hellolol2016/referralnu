@@ -222,3 +222,4 @@ def send_reminder(studentId):
     except Exception as e:
         current_app.logger.error(f"Error sending reminders: {str(e)}")
         return make_response(jsonify({"error": str(e)}), 500)
+
