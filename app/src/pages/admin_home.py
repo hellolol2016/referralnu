@@ -24,10 +24,8 @@ if st.button('Manage Connections',
              use_container_width=True):
   st.switch_page('pages/admin_all_cons.py')
 
-if st.button('Contact Student', 
-             type='primary',
-             use_container_width=True):
-  st.switch_page('pages/admin_student_messages.py')
+#if st.button('Contact Student', type='primary', use_container_width=True):
+  #st.switch_page('pages/admin_student_messages.py')
 
 if st.button('Manage Messages', 
              type='primary',

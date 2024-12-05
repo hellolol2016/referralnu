@@ -172,8 +172,6 @@ def get_best_referrers():
 
     return res
 
-
-
 @referrers.route("/left", methods=["GET"])
 def get_best_referrers_left():
     # Default to 5 if 'top_n' is not provided
