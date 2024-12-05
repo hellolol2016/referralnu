@@ -1,6 +1,7 @@
 import logging
 import streamlit as st
 import requests
+import pandas as pd
 
 # Backend API URL
 API_URL = "http://web-api:4000/connections"
@@ -9,6 +10,7 @@ API_URL = "http://web-api:4000/connections"
 logger = logging.getLogger(__name__)
 
 st.title("Connections Viewer")
+
 
 # Function to fetch connections by studentId
 def fetch_connections(student_id):
@@ -24,6 +26,7 @@ def fetch_connections(student_id):
         st.error(f"Error: {str(e)}")
         return []
 
+
 # Main interface
 student_id = st.text_input("Enter Student ID")
 
@@ -32,8 +35,26 @@ if student_id:
         connections = fetch_connections(student_id)
         if connections:
             st.success("Connections loaded successfully!")
-            # Display connections in a table
-            st.table(connections)
+
+            # Convert connections to a DataFrame
+            df = pd.DataFrame(connections)
+
+            # Check for required columns
+            required_columns = ["connectionId", "creationDate", "referrerId", "studentId"]
+            if all(col in df.columns for col in required_columns):
+                # Create a "Send Message" link for each referrerId
+                df["Send Message"] = df["referrerId"].apply(
+                    lambda ref_id: f'<a href="mailto:referrer_{ref_id}@example.com" target="_blank">Send Message</a>'
+                )
+
+                # Display the table
+                df_display = df[["connectionId", "creationDate", "referrerId", "studentId", "Send Message"]]
+                st.markdown(
+                    df_display.to_html(escape=False, index=False),
+                    unsafe_allow_html=True
+                )
+            else:
+                st.error(f"The response does not contain the required columns: {required_columns}")
         else:
             st.warning("No connections found.")
 else:
