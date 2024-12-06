@@ -3,13 +3,6 @@ Team Members: Yicheng Wang, Sheryl Cheng, Shireen Kumar, Andreas Seferian, Isha 
 
 NUReferrals, aims to tap into one branch of professional networking through referrals. Job seekers, especially students, can easily find and request referrals from industry professionals in their desired fields, significantly enhancing their chances of landing interviews and job offers. In addition, industry professionals can effortlessly discover qualified candidates to fill their referral slots through detailed applicant profiles, streamlining the hiring process. Our app also facilitates connections through industry-hosted events, allowing users to network face-to-face and engage with potential referrers directly.
 
-## Prerequisites
-
-- A GitHub Account
-- A terminal-based or GUI git client
-- VSCode with the Python Plugin
-- A distrobution of Python running on your laptop (Choco (for Windows), brew (for Macs), miniconda, Anaconda, etc). 
-
 ## Current Project Components
 
 Currently, there are three major components which will each run in their own Docker Containers:
