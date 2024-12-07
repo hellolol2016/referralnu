@@ -7,7 +7,7 @@ NUReferrals, aims to tap into one branch of professional networking through refe
 ## **Table of Contents**
 
 1. [Introduction](#introduction)  
-2. [Features](#features)  
+2. [Features/Personas](#Features/Personas)  
 3. [Tech Stack](#tech-stack)  
 4. [Setup and Installation](#setup-and-installation)  
 5. [Running the Project](#running-the-project)  
@@ -28,7 +28,7 @@ ReferralsNU requires existing data on users and referrals to function meaningful
 
 ---
 
-## **Features**
+## **Features/Personas**
 
 There are 4 personas, or people that you can act as, when using NUReferrals
 
@@ -37,8 +37,6 @@ As an administrator, you can…
 
 ### Referral Seeker/ Student
 As a referral seeker, you can search through your connections and reach out to referrers. Referral seekers are also able to view, update, and create their own requests and search through referrer profiles with filtering functionality to request referrals from. If students need guidance, they are also able to find advisor contact info in order to reach out.
-
-## Personas
 
 ### Co-op advisor
 As a co-op advisor, you need to be able to keep tabs on your students and their progress to make sure that they are on the right track. With that advisors are able to view student information given a student id, advisors can also view students requests and how many are pending, accepted, or rejected. Advisors are also tasked with helping students find the best referrers and companies for students to have the best chance at receiving a referral, with that advisors are able to view the top companies that give out the most referrals and they can view individual referrers who haven’t given out many referrals so they have plenty left. Advisor can also message a student and set a follow up date to make sure they are progressing.
