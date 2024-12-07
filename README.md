@@ -36,7 +36,7 @@ There are 4 personas, or people that you can act as, when using NUReferrals
 As an administrator, you can… 
 
 ### Referral Seeker/ Student
-As a referral seeker, you can…
+As a referral seeker, you can search through your connections and reach out to referrers. Referral seekers are also able to view, update, and create their own requests and search through referrer profiles with filtering functionality to request referrals from. If students need guidance, they are also able to find advisor contact info in order to reach out.
 
 
 ### Co-op advisor
