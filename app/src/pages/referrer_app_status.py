@@ -12,10 +12,8 @@ tab = st.sidebar.radio("Choose a functionality", ["View Requests", "Update Reque
 if tab == "View Requests":
     st.title("View Request Details by Student ID")
 
-    # Input for Student ID
     student_id = st.text_input("Enter Student ID", key="view_student_id")
 
-    # Fetch and display request details
     if st.button("Fetch Request Details", key="fetch_requests_button"):
         if not student_id:
             st.warning("Please enter a Student ID.")
