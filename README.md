@@ -44,7 +44,7 @@ As a referral seeker, you can search through your connections and reach out to r
 As a co-op advisor, you need to be able to keep tabs on your students and their progress to make sure that they are on the right track. With that advisors are able to view student information given a student id, advisors can also view students requests and how many are pending, accepted, or rejected. Advisors are also tasked with helping students find the best referrers and companies for students to have the best chance at receiving a referral, with that advisors are able to view the top companies that give out the most referrals and they can view individual referrers who haven’t given out many referrals so they have plenty left. Advisor can also message a student and set a follow up date to make sure they are progressing.
 
 ### Referral Giver
-As a referral giver, you can…
+As a referral giver, you can offer students referrals. You can view and manage all job or internship requests, access detailed student profiles, and review applications tied to specific opportunities. Additionally, referrers have tools to manage associated companies, update application statuses, and create or manage communication connections between students and organizations. You also maintain control over their own contact information, ensuring accuracy for smooth interactions. 
 
 ### Admin 
 
