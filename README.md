@@ -33,7 +33,7 @@ ReferralsNU requires existing data on users and referrals to function meaningful
 There are 4 personas, or people that you can act as, when using NUReferrals
 
 ### Administrator
-As an administrator, you can… 
+As an administrator, you have comprehensive oversight capabilities, allowing them to moderate all requests and remove any deemed inappropriate. They can manage existing connections, supervise communications between users, and ensure platform integrity. Additionally, admins can search messages by keyword and delete them if necessary to maintain a safe and professional environment.
 
 ### Referral Seeker/ Student
 As a referral seeker, you can search through your connections and reach out to referrers. Referral seekers are also able to view, update, and create their own requests and search through referrer profiles with filtering functionality to request referrals from. If students need guidance, they are also able to find advisor contact info in order to reach out.
@@ -44,11 +44,6 @@ As a co-op advisor, you need to be able to keep tabs on your students and their 
 ### Referral Giver
 As a referral giver, you can offer students referrals. You can view and manage all job or internship requests, access detailed student profiles, and review applications tied to specific opportunities. Additionally, referrers have tools to manage associated companies, update application statuses, and create or manage communication connections between students and organizations. You also maintain control over their own contact information, ensuring accuracy for smooth interactions. 
 
-### Admin 
-
-- Able to moderate all requests and delete them if they're not appropriate
-- Manage existing connections and supervise messages
-- Search and delete messages by keyword
 ---
 
 ## **Tech Stack**
