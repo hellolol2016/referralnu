@@ -21,7 +21,6 @@ except Exception as e:
 # Fetch referrer and student names for each request
 for req in reqs:
     try:
-        # Fetch student data
         student_response = requests.get(f"{student_endpoint}/{req['studentId']}")
         if student_response.status_code == 200:
             student_data = student_response.json()

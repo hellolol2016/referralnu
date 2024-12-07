@@ -4,7 +4,6 @@ import logging
 import streamlit as st
 import requests
 
-# Back button
 if st.button("← Back to Referrer Home"):
     st.switch_page("pages/Referrer_Home.py")
 
@@ -29,19 +28,15 @@ def fetch_student_requests(student_id):
         st.error(f"Error: {str(e)}")
         return []
 
-# Input for Student ID
 student_id = st.text_input("Enter Student ID")
 
-# Fetch and display the data
 if student_id:
     if st.button("Fetch Student Information"):
-        # Fetch data from the backend API
         student_requests = fetch_student_requests(student_id)
 
         if student_requests:
             st.success("Information loaded successfully!")
 
-            # Format and display the data
             st.subheader("Student Information")
             for student in student_requests:
                 st.markdown(f"**Student ID:** {student['studentId']}")
