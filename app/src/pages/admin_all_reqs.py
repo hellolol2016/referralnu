@@ -14,8 +14,9 @@ company_endpoint = "http://web-api:4000/companies"
 
 reqs =  []
 try:
-  reqs = requests.get(requests_endpoint).json()
-  #st.write(reqs)
+    response = requests.get(requests_endpoint)
+    response.raise_for_status()
+    reqs = response.json()
 except Exception as e:
   st.write(e)
   st.write("**Important**: Could not connect to api, so using dummy data.")
@@ -35,7 +36,7 @@ for req in reqs:
         company_response = requests.get(f"{company_endpoint}/{req['companyId']}")
         company_data = company_response.json()
         #st.write(type(student_data))  # Debug: Print the response to see its structure
-        company_name = company_data[0].get("name") 
+        company_name = company_data.get("name") 
     except Exception as e:
         st.write(e)
         company_name = "Unknown company"
