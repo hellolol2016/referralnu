@@ -7,7 +7,7 @@ NUReferrals, aims to tap into one branch of professional networking through refe
 ## **Table of Contents**
 
 1. [Introduction](#introduction)  
-2. [Features/Personas](#features)  
+2. [Features/Personas](#Features/Personas)  
 3. [Tech Stack](#tech-stack)  
 4. [Setup and Installation](#setup-and-installation)  
 5. [Running the Project](#running-the-project)  
